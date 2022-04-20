@@ -1,13 +1,14 @@
 <header>
   <!-- Navbar -->
   <nav
-    class="navbar navbar-expand-md absolute top-0 z-10 flex w-full items-center justify-between bg-gradient-to-r from-indigo-500/20 via-purple-500/40 to-pink-500/20 py-2 shadow-lg"
+    class="navbar navbar-expand-md absolute top-0 z-20 flex w-full items-center justify-between bg-gradient-to-r from-neutral-100/10 via-rose-800/40 to-rose-800/90 py-2 shadow-lg md:to-neutral-100/10"
   >
     <div class="flex w-1/5 min-w-fit">
       <div
-        class="mx-5 inline-block h-28 rounded-full bg-white hover:bg-gray-200"
+        [routerLink]="logoRoute"
+        class="mx-5 inline-block h-28 cursor-pointer rounded-full bg-white hover:bg-gray-200"
       >
-        <img class="h-28" src="assets/images/logo.png" alt="" />
+        <img alt="" class="h-28" src="assets/images/logo.png" />
       </div>
       <h1
         class="text-shadow my-auto h-fit text-3xl font-bold text-white md:block"
@@ -17,26 +18,26 @@
     </div>
     <div class="px-6 text-right">
       <button
-        class="navbar-toggler border-0 bg-transparent py-3 px-2 text-xl leading-none text-white transition-shadow duration-150 ease-in-out hover:text-gray-700 md:hidden"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContentX"
         aria-controls="navbarSupportedContentX"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        class="navbar-toggler border-0 bg-transparent py-3 px-2 text-xl leading-none text-white transition-shadow duration-150 ease-in-out hover:text-gray-700 md:hidden"
+        data-bs-target="#navbarSupportedContentX"
+        data-bs-toggle="collapse"
+        type="button"
       >
         <svg
           aria-hidden="true"
-          focusable="false"
-          data-prefix="fas"
           class="w-5"
+          data-prefix="fas"
+          focusable="false"
           role="img"
-          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            fill="currentColor"
             d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+            fill="currentColor"
           ></path>
         </svg>
       </button>
@@ -45,11 +46,19 @@
         id="navbarSupportedContentX"
       >
         <ul class="navbar-nav mr-auto flex flex-col md:flex-row">
-          <li class="nav-item" *ngFor="let button of displayButtons">
+          <li *ngFor="let button of displayButtons" class="nav-item">
             <a
-              class="nav-link block p-2 text-2xl text-white transition duration-150 ease-in-out hover:text-gray-700"
               [routerLink]="button.link"
+              class="nav-link block p-2 text-2xl text-white transition duration-150 ease-in-out hover:text-gray-700"
+              routerLinkActive="text-shadow-md hover:text-white cursor-auto"
               >{{ button.label }}</a
+            >
+          </li>
+          <li *ngIf="isUserLogged">
+            <a
+              (click)="handleLogout()"
+              class="nav-link block cursor-pointer p-2 text-2xl text-white transition duration-150 ease-in-out hover:text-gray-700"
+              >Logout</a
             >
           </li>
         </ul>

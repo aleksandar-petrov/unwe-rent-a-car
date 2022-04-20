@@ -1,0 +1,15 @@
+version: "3"
+services:
+  mssql:
+    build:
+      context: mssql
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Secret1234
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+volumes:
+  mssql-data:

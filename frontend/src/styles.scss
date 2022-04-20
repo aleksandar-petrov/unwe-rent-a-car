@@ -7,20 +7,46 @@
     .text-shadow {
       text-shadow: 1px 1px 2px black;
     }
+
     .text-shadow-md {
       text-shadow: 2px 2px 4px black;
     }
+
     .text-shadow-lg {
       text-shadow: 5px 5px 10px black;
     }
+
     .text-shadow-none {
       text-shadow: none;
     }
   }
 }
 
-@import url('http://fonts.cdnfonts.com/css/nexa-bold');
+@import url("http://fonts.cdnfonts.com/css/nexa-bold");
 
 * {
-  font-family: 'Nexa', sans-serif;
+  font-family: "Nexa", sans-serif;
+  font-weight: bold;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 1px #a23242 !important;
+}
+
+@import '~ngx-toastr/toastr';
+
+.toast-top-center {
+  top: 10rem !important;
+}
+
+//.toast-error {
+//  background: #a23242 !important;
+//}
+
+#toast-container > .toast-custom {
+  content: "\f00C";
+}
+
+.toast-custom {
+  background-color: purple;
 }

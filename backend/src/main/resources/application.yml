@@ -1,0 +1,24 @@
+server:
+  port: 8444
+  servlet:
+    context-path: /api
+spring:
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    password: Secret1234
+    url: jdbc:sqlserver://localhost;databaseName=rentacardb
+    username: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        default_schema: "[18118010]"
+  flyway:
+    enabled: false
+
+jwt:
+  secret:
+    key: Secret1234

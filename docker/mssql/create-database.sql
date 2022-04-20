@@ -1,0 +1,6 @@
+CREATE DATABASE rentacardb;
+GO
+USE rentacardb;
+GO
+CREATE SCHEMA [18118010];
+GO

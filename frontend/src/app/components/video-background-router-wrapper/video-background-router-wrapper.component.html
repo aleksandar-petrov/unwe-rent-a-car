@@ -1,17 +1,18 @@
 <video
-  autoplay
-  class="h-screen w-screen object-cover blur-md"
   [muted]="'muted'"
-  loop
+  [ngClass]="{ 'blur-md': shouldBlurVideo }"
+  autoplay
+  class="h-screen w-screen object-cover"
   id="myVideo"
+  loop
 >
   <source src="assets/images/background.mp4" type="video/mp4" />
 </video>
 <div
   class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed"
-  style="background-color: rgba(235, 73, 157, 0.4)"
+  style="background-color: rgba(163, 46, 68, 0.4)"
 >
-  <div class="mt-36 h-[calc(100%-9rem)]">
+  <div class="mt-36 h-[calc(100%-9rem)] overflow-auto pb-2">
     <router-outlet></router-outlet>
   </div>
 </div>
