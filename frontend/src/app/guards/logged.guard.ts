@@ -30,7 +30,7 @@ export class LoggedGuard implements CanActivate {
           return true;
         }
 
-        return this.router.createUrlTree(['/home']);
+        return this.router.createUrlTree(['/explore']);
       })
     );
   }

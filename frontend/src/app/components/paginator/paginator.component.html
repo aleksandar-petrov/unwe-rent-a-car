@@ -1,0 +1,63 @@
+<div
+  *ngIf="page"
+  class="mx-auto flex w-fit justify-center overflow-hidden rounded-xl bg-white/50"
+>
+  <nav>
+    <ul class="list-style-none flex">
+      <li>
+        <button
+          (click)="handlePageChange(1)"
+          [ngClass]="{
+            '!hover:bg-rose-800 !hover:text-white !bg-rose-700 !text-white':
+              page.number === 0
+          }"
+          class="relative block rounded rounded border-0 bg-transparent py-1.5 px-3 text-gray-800 outline-none transition-all duration-1000 hover:bg-gray-200 hover:text-gray-800 focus:shadow-none"
+        >
+          1
+        </button>
+      </li>
+      <li *ngIf="!pageNumbers.includes(2) && pageNumbers.length > 0">
+        <button
+          class="pointer-events-none relative block rounded rounded border-0 bg-transparent py-1.5 px-3 text-gray-800 outline-none transition-all duration-1000 hover:text-gray-800 focus:shadow-none"
+        >
+          ...
+        </button>
+      </li>
+      <li *ngFor="let pageNumber of pageNumbers">
+        <button
+          (click)="handlePageChange(pageNumber)"
+          [ngClass]="{
+            '!hover:bg-rose-800 !hover:text-white !bg-rose-700 !text-white':
+              page.number === pageNumber - 1
+          }"
+          class="relative block rounded rounded border-0 bg-transparent py-1.5 px-3 text-gray-800 outline-none transition-all duration-1000 hover:bg-gray-200 hover:text-gray-800 focus:shadow-none"
+        >
+          {{ pageNumber }}
+        </button>
+      </li>
+      <li
+        *ngIf="
+          !pageNumbers.includes(page.totalPages - 1) && pageNumbers.length > 0
+        "
+      >
+        <button
+          class="pointer-events-none relative block rounded rounded border-0 bg-transparent py-1.5 px-3 text-gray-800 outline-none transition-all duration-1000 hover:text-gray-800 focus:shadow-none"
+        >
+          ...
+        </button>
+      </li>
+      <li>
+        <button
+          (click)="handlePageChange(page.totalPages)"
+          [ngClass]="{
+            '!hover:bg-rose-800 !hover:text-white !bg-rose-700 !text-white':
+              page.number === page.totalPages - 1
+          }"
+          class="relative block rounded rounded border-0 bg-transparent py-1.5 px-3 text-gray-800 outline-none transition-all duration-1000 hover:bg-gray-200 hover:text-gray-800 focus:shadow-none"
+        >
+          {{ page.totalPages }}
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

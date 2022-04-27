@@ -32,7 +32,7 @@ export class LoginPageComponent implements OnInit {
     const loginForm = this.loginFormGroup.value as LoginForm;
     await this.userService.login(loginForm, loginForm.rememberMe);
 
-    this.router.navigateByUrl('/home');
+    this.router.navigate(['/explore']);
 
     this.loginFormGroup.reset();
   }

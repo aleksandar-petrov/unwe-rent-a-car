@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { Role } from '../../models/user.model';
 
 interface NavbarButton {
   label: string;
   link: string;
+  requiredRoles?: Role[];
 }
 
 @Component({
@@ -13,10 +15,6 @@ interface NavbarButton {
 })
 export class NavbarComponent implements OnInit {
   guestDisplayButtons: NavbarButton[] = [
-    {
-      label: 'About us',
-      link: '/about-us',
-    },
     {
       label: 'Login',
       link: '/login',
@@ -29,8 +27,8 @@ export class NavbarComponent implements OnInit {
 
   loggedDisplayButtons: NavbarButton[] = [
     {
-      label: 'Home',
-      link: '/home',
+      label: 'Explore',
+      link: '/explore',
     },
     {
       label: 'My Cars',
@@ -45,6 +43,8 @@ export class NavbarComponent implements OnInit {
   displayButtons: NavbarButton[] = [];
   logoRoute: string = '/';
   isUserLogged: boolean = false;
+  isUserAdmin: boolean = false;
+  isScreenMd: boolean = window.innerWidth >= 768;
 
   constructor(private userService: UserService) {}
 
@@ -52,7 +52,8 @@ export class NavbarComponent implements OnInit {
     this.userService.user$.subscribe((user) => {
       if (!!user) {
         this.displayButtons = this.loggedDisplayButtons;
-        this.logoRoute = '/home';
+        this.logoRoute = '/explore';
+        this.isUserAdmin = user.roles.includes(Role.ROLE_ADMIN);
         this.isUserLogged = true;
 
         return;
@@ -60,11 +61,17 @@ export class NavbarComponent implements OnInit {
 
       this.displayButtons = this.guestDisplayButtons;
       this.logoRoute = '/';
+      this.isUserAdmin = false;
       this.isUserLogged = false;
     });
   }
 
   handleLogout() {
     this.userService.logout();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isScreenMd = window.innerWidth >= 768;
   }
 }

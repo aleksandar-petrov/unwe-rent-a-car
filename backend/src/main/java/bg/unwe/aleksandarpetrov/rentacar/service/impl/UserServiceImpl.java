@@ -72,7 +72,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean userExists() {
+  public boolean userExists(String email) {
+    if (email != null) {
+      return userRepository.findFirstByEmail(email).isPresent();
+    }
+
+    return userExists();
+  }
+
+  private boolean userExists() {
     return userRepository.count() > 0;
   }
 

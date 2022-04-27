@@ -10,6 +10,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { UserService } from './services/user.service';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PagesModule } from './pages/pages.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,9 +20,11 @@ import { UserService } from './services/user.service';
     BrowserModule,
     AppRoutingModule,
     NavbarModule,
+    PagesModule,
     VideoBackgroundRouterWrapperModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NgxSmartModalModule.forRoot(),
     ToastrModule.forRoot({ positionClass: 'toast-top-center' }),
     JwtModule.forRoot({
       config: {
@@ -28,6 +33,7 @@ import { UserService } from './services/user.service';
         },
       },
     }),
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

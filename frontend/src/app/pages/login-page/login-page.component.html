@@ -4,14 +4,14 @@
   >
     <form [formGroup]="loginFormGroup">
       <rac-form-control
-        [formGroup]="loginFormGroup"
+        [control]="loginFormGroup.get('email')"
         controlName="email"
         label="Email"
         placeholder="Enter email address"
         type="email"
       ></rac-form-control>
       <rac-form-control
-        [formGroup]="loginFormGroup"
+        [control]="loginFormGroup.get('password')"
         controlName="password"
         label="Password"
         placeholder="Enter password"
@@ -19,7 +19,7 @@
       >
       </rac-form-control>
       <rac-form-control
-        [formGroup]="loginFormGroup"
+        [control]="loginFormGroup.get('rememberMe')"
         controlName="rememberMe"
         label="Remember me"
         type="checkbox"
@@ -27,7 +27,6 @@
 
       <button
         (click)="handleSignIn()"
-        [disabled]="loginFormGroup.invalid"
         class="text-md w-full rounded bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
         type="submit"
       >

@@ -9,6 +9,7 @@ import {
 import { UserService } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { Role } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AdminGuard implements CanActivate {
@@ -25,7 +26,7 @@ export class AdminGuard implements CanActivate {
     return this.userService.user$.pipe(
       take(1),
       map((user) => {
-        if (user?.roles.includes('ROLE_ADMIN')) {
+        if (user?.roles.includes(Role.ROLE_ADMIN)) {
           return true;
         }
 

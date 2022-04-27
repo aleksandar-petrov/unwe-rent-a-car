@@ -1,0 +1,52 @@
+<div
+  *ngFor="let image of uploadedImages"
+  class="mb-6 flex items-center justify-between"
+>
+  <img
+    [src]="image.photo.base64"
+    alt="image"
+    class="h-20 w-20 rounded object-cover"
+  />
+  <div class="flex w-1/2 items-center rounded-full bg-gray-200">
+    <div
+      [style]="'width: ' + image.progress + '%'"
+      class="rounded-full bg-rose-700 p-2 text-center font-bold leading-none text-rose-100"
+    >
+      {{ image.progress }}%
+    </div>
+  </div>
+  <div
+    *ngIf="image.progress < 100"
+    class="spinner-border flex h-8 w-8 animate-spin rounded-full border-4 text-rose-700"
+    role="status"
+  >
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <button
+    (click)="handleImageDelete(image.photo.id)"
+    *ngIf="image.progress === 100"
+    class="inline-block h-9 w-9 rounded-full bg-rose-700 pt-1 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-800 hover:shadow-lg focus:bg-rose-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-900 active:shadow-lg"
+    type="button"
+  >
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </button>
+</div>
+
+<div class="mb-6 flex items-center justify-center gap-8 text-center">
+  <input
+    #fileUpload
+    (change)="handleFilesSelected($event)"
+    accept="image/png, image/gif, image/jpeg"
+    class="hidden"
+    multiple
+    type="file"
+  />
+  Upload photos
+  <button
+    (click)="fileUpload.click()"
+    class="inline-block h-9 w-9 rounded-full bg-rose-700 pt-1 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-800 hover:shadow-lg focus:bg-rose-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-900 active:shadow-lg"
+    type="button"
+  >
+    <fa-icon [icon]="faUpload"></fa-icon>
+  </button>
+</div>

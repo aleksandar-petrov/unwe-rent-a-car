@@ -19,11 +19,16 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@auth0/angular-jwt": "^5.0.2",
+    "@fortawesome/angular-fontawesome": "^0.10.2",
+    "@fortawesome/fontawesome-svg-core": "^6.1.0",
+    "@fortawesome/free-solid-svg-icons": "^6.1.0",
+    "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "tw-elements": "^1.0.0-alpha12",
     "url-polyfill": "^1.1.12",
+    "viewerjs": "^1.10.5",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

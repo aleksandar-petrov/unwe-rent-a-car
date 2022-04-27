@@ -4,35 +4,36 @@
   >
     <form [formGroup]="registerFormGroup">
       <rac-form-control
-        [formGroup]="registerFormGroup"
+        [control]="registerFormGroup.get('firstName')"
         controlName="firstName"
         label="First name"
         placeholder="Enter first name"
         type="text"
       ></rac-form-control>
       <rac-form-control
-        [formGroup]="registerFormGroup"
+        [control]="registerFormGroup.get('lastName')"
         controlName="lastName"
         label="Last name"
         placeholder="Enter last name"
         type="text"
       ></rac-form-control>
       <rac-form-control
-        [formGroup]="registerFormGroup"
+        [control]="registerFormGroup.get('email')"
+        [validationMessage]="emailValidationMessage"
         controlName="email"
         label="Email"
         placeholder="Enter email address"
         type="email"
       ></rac-form-control>
       <rac-form-control
-        [formGroup]="registerFormGroup"
+        [control]="registerFormGroup.get('password')"
         controlName="password"
         label="Password"
         placeholder="Enter password"
         type="password"
       ></rac-form-control>
       <rac-form-control
-        [formGroup]="registerFormGroup"
+        [control]="registerFormGroup.get('confirmPassword')"
         controlName="confirmPassword"
         label="Confirm password"
         placeholder="Enter confirm password"
@@ -40,6 +41,7 @@
       ></rac-form-control>
       <button
         (click)="handleRegister()"
+        [disabled]="registerFormGroup.invalid"
         class="text-md w-full rounded bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
         type="submit"
       >

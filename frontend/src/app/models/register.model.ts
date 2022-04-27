@@ -10,5 +10,3 @@ export interface RegisterResponse {
   id: string;
   email: string;
 }
-
-export type RegisterForm = RegisterRequest;

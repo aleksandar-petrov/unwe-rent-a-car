@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'rac-form-control',
@@ -11,9 +11,10 @@ export class FormControlComponent implements OnInit {
   @Input() placeholder: string = '';
   @Input() controlName: string = '';
   @Input() type: string = '';
-  @Input() formGroup: FormGroup | undefined;
+  @Input() control: AbstractControl | undefined | null;
   @Input()
   validationMessage: string = '';
+  @Input() min: number | undefined;
 
   constructor() {}
 
@@ -25,5 +26,21 @@ export class FormControlComponent implements OnInit {
     return `Please enter a correct ${value}.`;
   }
 
+  get formControl(): FormControl {
+    return this.control as FormControl;
+  }
+
   ngOnInit(): void {}
+
+  shouldShow(type: string): boolean {
+    if (!this.control) {
+      return false;
+    }
+
+    if (type === this.type) {
+      return true;
+    }
+
+    return type === 'standard' && !['select', 'checkbox'].includes(this.type);
+  }
 }

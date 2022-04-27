@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomePageComponent } from './home-page.component';
+import { ExplorePageComponent } from './explore-page.component';
 
 
 
 @NgModule({
   declarations: [
-    HomePageComponent
+    ExplorePageComponent
   ],
   imports: [
     CommonModule
   ]
 })
-export class HomePageModule { }
+export class ExplorePageModule { }

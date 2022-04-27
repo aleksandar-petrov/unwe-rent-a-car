@@ -1,0 +1,25 @@
+<ngx-smart-modal
+  #modal
+  [closable]="false"
+  [dismissable]="false"
+  [identifier]="identifier"
+  customClass="modal nsm-centered nsm-dialog-animation-fade "
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable pointer-events-none relative m-0 w-full"
+  >
+    <div
+      class="modal-content pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-neutral-200 bg-clip-padding text-current shadow-lg outline-none"
+    >
+      <button
+        (click)="modal.close()"
+        aria-label="Close"
+        class="btn-close absolute right-5 top-5 z-10 box-content h-4 w-4 cursor-pointer rounded-none border-none p-1 text-black opacity-50 hover:text-black hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+        type="button"
+      ></button>
+      <div class="modal-body relative w-full p-10">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>

@@ -29,9 +29,10 @@
   font-weight: bold;
 }
 
-.form-control:focus {
+.form-control:focus, .form-select:focus {
   box-shadow: 0 0 0 1px #a23242 !important;
 }
+
 
 @import '~ngx-toastr/toastr';
 
@@ -50,3 +51,23 @@
 .toast-custom {
   background-color: purple;
 }
+
+
+$transition-duration: 1000ms;
+@import "~ngx-smart-modal/ngx-smart-modal";
+
+.nsm-content {
+  background: none;
+  padding: 0;
+  box-shadow: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.nsm-dialog-btn-close {
+  top: 5%;
+  right: 5%;
+}
+
+@import '~viewerjs/dist/viewer.css';

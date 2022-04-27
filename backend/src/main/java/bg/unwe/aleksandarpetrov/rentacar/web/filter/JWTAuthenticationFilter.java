@@ -1,7 +1,5 @@
 package bg.unwe.aleksandarpetrov.rentacar.web.filter;
 
-import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.JWT.HEADER_AUTHORIZATION;
-import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.JWT.TOKEN_PREFIX;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import bg.unwe.aleksandarpetrov.rentacar.entity.User;
@@ -72,8 +70,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     var userEntity = ((User) auth.getPrincipal());
 
     var token = jwtService.generateToken(userEntity, secretKey);
-
-    res.addHeader(HEADER_AUTHORIZATION, TOKEN_PREFIX + token);
 
     res.setContentType(APPLICATION_JSON_VALUE);
     res.setCharacterEncoding("UTF-8");

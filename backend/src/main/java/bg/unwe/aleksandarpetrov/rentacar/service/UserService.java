@@ -8,5 +8,5 @@ public interface UserService extends UserDetailsService {
 
   UserInfoResponse register(UserRegisterRequest model);
 
-  boolean userExists();
+  boolean userExists(String email);
 }
