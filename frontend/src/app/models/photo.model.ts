@@ -20,7 +20,7 @@ export interface PhotoProgress {
   photo: {
     id: string;
     url: string | null;
-    base64: string;
+    base64?: string;
   };
 }
 

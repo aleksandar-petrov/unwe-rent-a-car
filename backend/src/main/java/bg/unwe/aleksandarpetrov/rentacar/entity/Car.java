@@ -1,7 +1,10 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
 import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.CarStatus;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.CarTransmission;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +13,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,7 +48,16 @@ public class Car extends BaseEntity {
 
   @OneToMany(cascade = CascadeType.ALL)
   @Exclude
-  private List<Photo> photos;
+  private List<Photo> photos = new ArrayList<>();
 
   @ManyToOne private User owner;
+
+  @Column(nullable = false)
+  private BigDecimal pricePerDay;
+
+  @Enumerated(EnumType.STRING)
+  private CarStatus status;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  private Location location;
 }

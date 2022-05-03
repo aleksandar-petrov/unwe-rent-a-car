@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PhotoRepository extends JpaRepository<Photo, String> {
 
+  List<Photo> findAllByIdIn(List<String> ids);
+
   List<Photo> findAllByIsAssignedIsFalse();
 
   List<Photo> findAllByIdInAndIsAssignedIsFalse(List<String> ids);

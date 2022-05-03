@@ -17,3 +17,8 @@ export enum Role {
   ROLE_MODERATOR = 'ROLE_MODERATOR',
   ROLE_USER = 'ROLE_USER',
 }
+
+export interface AnyUserExistsRequest {
+  email?: string;
+  phoneNumber?: string;
+}

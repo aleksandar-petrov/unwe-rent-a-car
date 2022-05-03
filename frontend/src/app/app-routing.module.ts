@@ -7,9 +7,10 @@ import { RegisterPageComponent } from './pages/register-page/register-page.compo
 import { LoggedGuard } from './guards/logged.guard';
 import { UserGuard } from './guards/user.guard';
 import { MyCarsPageComponent } from './pages/my-cars-page/my-cars-page.component';
-import { MyRentalsPageComponent } from './pages/my-rentals-page/my-rentals-page.component';
 import { CarDetailsPageComponent } from './pages/car-details-page/car-details-page.component';
 import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
+import { RentalsPanelPageComponent } from './pages/rentals-panel-page/rentals-panel-page.component';
+import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 
 const routes: Routes = [
   {
@@ -39,8 +40,8 @@ const routes: Routes = [
     canActivate: [UserGuard],
   },
   {
-    path: 'my-rentals',
-    component: MyRentalsPageComponent,
+    path: 'rentals-panel/:panel-type/:rental-type',
+    component: RentalsPanelPageComponent,
     canActivate: [UserGuard],
   },
   {
@@ -48,6 +49,8 @@ const routes: Routes = [
     component: CarDetailsPageComponent,
     canActivate: [UserGuard],
   },
+  { path: '404', component: NotFoundPageComponent },
+  { path: '**', component: NotFoundPageComponent },
 ];
 
 @NgModule({

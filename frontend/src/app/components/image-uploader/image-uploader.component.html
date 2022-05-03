@@ -3,7 +3,7 @@
   class="mb-6 flex items-center justify-between"
 >
   <img
-    [src]="image.photo.base64"
+    [src]="image.photo.base64 || image.photo.url"
     alt="image"
     class="h-20 w-20 rounded object-cover"
   />

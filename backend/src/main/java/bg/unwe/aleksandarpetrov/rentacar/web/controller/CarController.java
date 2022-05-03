@@ -4,6 +4,9 @@ import bg.unwe.aleksandarpetrov.rentacar.entity.User;
 import bg.unwe.aleksandarpetrov.rentacar.service.CarService;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarResponse;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarSearchRequest;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarSearchResponse;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.FindAllCarsRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,15 +34,27 @@ public class CarController {
     return carService.create(model, user.getId());
   }
 
+  @PutMapping("/{id}")
+  public void edit(@RequestBody @Valid @NotNull CarCreateRequest model, @PathVariable String id) {
+    carService.edit(id, model);
+  }
+
   @GetMapping
-  public Page<CarResponse> findAllByOwnerId(
-      @RequestParam("ownerId") String ownerId,
-      @RequestParam(required = false, defaultValue = "1") int page) {
-    return carService.findAllByOwnerId(ownerId, page);
+  public Page<CarResponse> findAll(
+      @RequestParam(required = false) String ownerId,
+      @RequestParam(required = false, defaultValue = "1") int page,
+      CarSearchRequest search,
+      @AuthenticationPrincipal User user) {
+    return carService.findAll(new FindAllCarsRequest(ownerId, page, user.getId(), search));
   }
 
   @GetMapping("/{id}")
   public CarResponse findById(@PathVariable String id) {
     return carService.findById(id);
+  }
+
+  @GetMapping("/search")
+  public CarSearchResponse getCarSearch() {
+    return carService.getCarSearch();
   }
 }

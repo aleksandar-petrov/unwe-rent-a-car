@@ -5,7 +5,9 @@ import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.Role.ROLE
 import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.Role.ROLE_USER;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.DUPLICATE_EMAIL;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.PASSWORD_MISMATCH;
+import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.USER_NOT_FOUND;
 
+import bg.unwe.aleksandarpetrov.rentacar.entity.QUser;
 import bg.unwe.aleksandarpetrov.rentacar.entity.Role;
 import bg.unwe.aleksandarpetrov.rentacar.entity.User;
 import bg.unwe.aleksandarpetrov.rentacar.exception.DuplicateEmailException;
@@ -14,11 +16,14 @@ import bg.unwe.aleksandarpetrov.rentacar.repository.RoleRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.UserRepository;
 import bg.unwe.aleksandarpetrov.rentacar.service.MappingService;
 import bg.unwe.aleksandarpetrov.rentacar.service.UserService;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.user.AnyUserExistsRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.user.UserInfoResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.user.UserRegisterRequest;
+import com.querydsl.core.types.dsl.Expressions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,15 +49,11 @@ public class UserServiceImpl implements UserService {
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     return userRepository
         .findFirstByEmail(email)
-        .orElseThrow(
-            () ->
-                new UsernameNotFoundException(
-                    String.format("User with email %s not found.", email)));
+        .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
   }
 
   @Override
   public UserInfoResponse register(UserRegisterRequest model) {
-
     if (userRepository.findFirstByEmail(model.getEmail()).isPresent()) {
       throw new DuplicateEmailException(String.format(DUPLICATE_EMAIL, model.getEmail()));
     }
@@ -72,12 +73,39 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public boolean userExists(String email) {
-    if (email != null) {
-      return userRepository.findFirstByEmail(email).isPresent();
+  public boolean userExists(AnyUserExistsRequest model) {
+    if (Objects.equals(model, new AnyUserExistsRequest())) {
+      return userExists();
     }
 
-    return userExists();
+    var userPath = QUser.user;
+
+    var predicate = Expressions.TRUE.isTrue();
+    if (model.getEmail() != null) {
+      predicate = predicate.and(userPath.email.eq(model.getEmail()));
+    }
+    if (model.getPhoneNumber() != null) {
+      if (!model.getPhoneNumber().matches("^(([+]359)|0)8[789]\\d{7}$")) {
+        predicate = predicate.and(Expressions.TRUE.isFalse());
+      } else {
+        var phoneNumberPredicate =
+            userPath
+                .phoneNumber
+                .eq(model.getPhoneNumber())
+                .or(userPath.phoneNumber.eq(getOtherPhoneNumberVariant(model.getPhoneNumber())));
+        predicate = predicate.and(phoneNumberPredicate);
+      }
+    }
+
+    return userRepository.findOne(predicate).isPresent();
+  }
+
+  private String getOtherPhoneNumberVariant(String phoneNumber) {
+    if (phoneNumber.startsWith("+")) {
+      return phoneNumber.replace("+359", "0");
+    }
+
+    return phoneNumber.replace("0", "+359");
   }
 
   private boolean userExists() {

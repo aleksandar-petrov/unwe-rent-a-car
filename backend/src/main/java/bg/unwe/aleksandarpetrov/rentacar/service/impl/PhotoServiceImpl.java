@@ -11,8 +11,10 @@ import bg.unwe.aleksandarpetrov.rentacar.service.PhotoService;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.photo.PhotoPatchRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.photo.PhotoUploadResponse;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class PhotoServiceImpl implements PhotoService {
@@ -70,8 +73,20 @@ public class PhotoServiceImpl implements PhotoService {
   @Override
   public void deleteUnusedPhotos() {
     var unusedPhotos = photoRepository.findAllByIsAssignedIsFalse();
+
+    deletePhotos(unusedPhotos);
+  }
+
+  @Override
+  public void deleteAll(List<String> ids) {
+    var photos = photoRepository.findAllByIdIn(ids);
+
+    deletePhotos(photos);
+  }
+
+  private void deletePhotos(List<Photo> photos) {
     var uploadedUnusedPhotosIdentifiers =
-        unusedPhotos.stream()
+        photos.stream()
             .filter(photo -> !photo.getIsAssigned() && photo.getIsUploaded())
             .map(photo -> photo.getUrl().replace(BUCKET_DOMAIN, ""))
             .map(key -> ObjectIdentifier.builder().key(key).build())
@@ -87,7 +102,7 @@ public class PhotoServiceImpl implements PhotoService {
       s3Client.deleteObjects(deleteObjectsRequest);
     }
 
-    photoRepository.deleteAll(unusedPhotos);
+    photoRepository.deleteAll(photos);
   }
 
   private String getPresignedUploadUrl(String id, PhotoType type) {

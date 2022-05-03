@@ -1,10 +1,12 @@
 <div *ngIf="shouldShow('standard')" class="form-group mb-6">
   <label
     [for]="controlName"
-    class="form-label mb-2 inline-block text-gray-700"
+    class="form-label mb-2 inline-block {{ labelTextClass }}"
     >{{ label }}</label
   >
   <input
+    (click)="onClick.emit()"
+    (keydown)="handleKeyDown($event)"
     [formControl]="formControl"
     [id]="controlName"
     [min]="min"
@@ -32,15 +34,19 @@
     />
     <label
       [for]="controlName"
-      class="form-check-label inline-block cursor-pointer pt-1.5 pb-0.5 pt-0.5 pb-1 text-gray-800"
+      class="form-check-label inline-block cursor-pointer pt-1.5 pb-0.5 pt-0.5 pb-1 {{
+        labelTextClass
+      }}"
       >{{ label }}</label
     >
   </div>
 </div>
 <div *ngIf="shouldShow('select')" class="form-group mb-6">
-  <label [for]="controlName" class="form-label mb-2 block text-gray-700">{{
-    label
-  }}</label>
+  <label
+    [for]="controlName"
+    class="form-label mb-2 block {{ labelTextClass }}"
+    >{{ label }}</label
+  >
   <select
     [formControl]="formControl"
     [id]="controlName"

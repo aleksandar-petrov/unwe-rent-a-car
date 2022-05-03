@@ -6,6 +6,7 @@ import { RegisterPageModule } from './register-page/register-page.module';
 import { MyCarsPageModule } from './my-cars-page/my-cars-page.module';
 import { CarDetailsPageModule } from './car-details-page/car-details-page.module';
 import { ExplorePageModule } from './explore-page/explore-page.module';
+import { RentalsPanelPageModule } from './rentals-panel-page/rentals-panel-page.module';
 
 @NgModule({
   declarations: [],
@@ -17,6 +18,7 @@ import { ExplorePageModule } from './explore-page/explore-page.module';
     RegisterPageModule,
     MyCarsPageModule,
     CarDetailsPageModule,
+    RentalsPanelPageModule,
   ],
 })
 export class PagesModule {}

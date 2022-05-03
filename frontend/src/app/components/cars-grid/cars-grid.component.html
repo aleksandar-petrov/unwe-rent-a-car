@@ -1,0 +1,44 @@
+<div
+  class="flex flex-wrap items-stretch justify-around 2xl:after:w-1/4 2xl:after:content-['']"
+>
+  <div
+    *ngFor="let car of cars"
+    class="relative mx-0 mb-7 flex w-full flex-col justify-around overflow-hidden rounded-3xl bg-gradient-to-br from-rose-800/50 to-white/50 p-5 pb-24 text-center shadow-2xl shadow-black md:mx-2 md:w-1/2 2xl:w-1/4"
+  >
+    <div
+      *ngIf="loggedUserId && loggedUserId === car.owner.id"
+      class="absolute right-0 top-0 w-fit rounded-bl-3xl bg-black/50 p-3 text-white"
+    >
+      <div class="text-shadow-md text-xl">Owned</div>
+    </div>
+    <div class="text-shadow-md mx-auto text-center text-3xl text-white">
+      {{ car?.make }} {{ car?.model }}
+    </div>
+    <div class="text-shadow-md mb-2 text-xl text-white">
+      {{ car?.year }}
+    </div>
+
+    <img
+      [src]="getFirstCarPhoto(car)"
+      alt="Car"
+      class="mx-auto h-36 w-fit cursor-pointer rounded-xl object-cover"
+      racImageViewer
+    />
+    <div class="absolute left-0 bottom-0">
+      <button
+        [routerLink]="['/car', 'details', car.id]"
+        class="text-md h-full min-w-fit rounded-tr-xl bg-blue-400/80 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
+        type="submit"
+      >
+        <fa-icon [icon]="faEye" class="mr-2"></fa-icon>
+        Details
+      </button>
+    </div>
+    <div
+      class="absolute right-0 bottom-0 h-20 w-fit rounded-tl-3xl bg-rose-700/70 p-3 text-white"
+    >
+      <div class="text-shadow-md text-2xl">${{ car?.pricePerDay }}</div>
+      <div class="text-shadow-md text-xl">Price per day</div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PhotoService } from '../../services/photo.service';
-import { PhotoProgress } from '../../models/photo.model';
+import { PhotoProgress, PhotoResponse } from '../../models/photo.model';
 
 @Component({
   selector: 'rac-image-uploader',
@@ -12,13 +12,27 @@ export class ImageUploaderComponent implements OnInit {
   faUpload = faUpload;
   faTrash = faTrash;
 
+  @Input() images: PhotoResponse[] = [];
   @Output() onImageChange = new EventEmitter<PhotoProgress[]>();
 
   uploadedImages: PhotoProgress[] = [];
 
   constructor(private photoService: PhotoService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.uploadedImages = this.uploadedImages.concat(
+      this.images.map((i) => {
+        return {
+          progress: 100,
+          photo: { id: i.id, url: i.url },
+        } as PhotoProgress;
+      })
+    );
+
+    if (this.uploadedImages.length > 0) {
+      this.onImageChange.emit(this.uploadedImages);
+    }
+  }
 
   handleFilesSelected(event: any) {
     const files = [...event?.target?.files] as File[];

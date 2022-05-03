@@ -4,7 +4,7 @@ import { RegisterRequest } from '../../models/register.model';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { ExistingEmailValidator } from '../../services/validators/existing-email.validator';
+import { RacValidators } from '../../services/validators/validators';
 
 @Component({
   selector: 'rac-register-page',
@@ -18,10 +18,15 @@ export class RegisterPageComponent implements OnInit {
     email: [
       null,
       [Validators.required, Validators.email],
-      [ExistingEmailValidator.createValidator(this.userService)],
+      [RacValidators.existingEmail(this.userService)],
     ],
     password: [null, Validators.required],
     confirmPassword: [null, Validators.required],
+    phoneNumber: [
+      null,
+      [Validators.required, Validators.pattern(/^(([+]?359)|0)8[789]\d{7}$/)],
+      [RacValidators.existingPhoneNumber(this.userService)],
+    ],
   });
 
   constructor(
@@ -33,6 +38,18 @@ export class RegisterPageComponent implements OnInit {
   get emailValidationMessage() {
     if (this.registerFormGroup.get('email')?.errors?.['emailAlreadyExists']) {
       return 'This email already exists.';
+    }
+
+    return '';
+  }
+
+  get phoneNumberValidationMessage() {
+    if (
+      this.registerFormGroup.get('phoneNumber')?.errors?.[
+        'phoneNumberAlreadyExists'
+      ]
+    ) {
+      return 'This phone number already exists.';
     }
 
     return '';
@@ -51,9 +68,5 @@ export class RegisterPageComponent implements OnInit {
       .register(registerForm)
       .pipe(switchMap(() => this.userService.login(registerForm, true)))
       .subscribe(() => this.router.navigateByUrl('/explore'));
-  }
-
-  asd() {
-    console.log(this.registerFormGroup.controls['email']);
   }
 }

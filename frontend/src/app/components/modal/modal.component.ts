@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
@@ -8,6 +8,9 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 })
 export class ModalComponent implements OnInit {
   @Input() identifier: string = '';
+  @Input() class: string = '';
+  @Input() fullWidth: boolean = false;
+  @Output() onClose = new EventEmitter<void>();
 
   constructor(private modalService: NgxSmartModalService) {}
 

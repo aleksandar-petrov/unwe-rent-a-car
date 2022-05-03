@@ -1,0 +1,94 @@
+<form [formGroup]="carFormGroup">
+  <rac-form-control
+    [control]="carFormGroup.get('year')"
+    controlName="year"
+    label="Year"
+    placeholder="Enter year"
+    type="select"
+  >
+    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+  </rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('make')"
+    controlName="make"
+    label="Make"
+    placeholder="Enter make"
+    type="select"
+  >
+    <option *ngFor="let make of makes" [value]="make">{{ make }}</option>
+  </rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('model')"
+    controlName="model"
+    label="Model"
+    placeholder="Enter model"
+    type="text"
+  >
+  </rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('mileage')"
+    [min]="1"
+    controlName="mileage"
+    label="Mileage"
+    placeholder="Enter mileage"
+    type="number"
+  ></rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('transmission')"
+    controlName="transmission"
+    label="Transmission"
+    placeholder="Enter transmission"
+    type="select"
+  >
+    <option value="MANUAL">MANUAL</option>
+    <option value="AUTOMATIC">AUTOMATIC</option>
+  </rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('pricePerDay')"
+    [min]="1"
+    controlName="pricePerDay"
+    label="Price per day"
+    placeholder="Enter price per day"
+    type="number"
+  ></rac-form-control>
+  <rac-form-control
+    [control]="carFormGroup.get('status')"
+    controlName="status"
+    label="Status"
+    placeholder="Enter status"
+    type="select"
+  >
+    <option value="PUBLIC">PUBLIC</option>
+    <option value="HIDDEN">HIDDEN</option>
+  </rac-form-control>
+  <rac-form-control
+    (onClick)="modal.open(); maps.initMapsAPI()"
+    [control]="carFormGroup.get('location')?.get('address')"
+    [typingDisabled]="true"
+    controlName="address"
+    label="Pickup location"
+    placeholder="Enter pickup location"
+    type="text"
+  ></rac-form-control>
+  <rac-image-uploader
+    (onImageChange)="handleImageChange($event)"
+    [images]="photos"
+  ></rac-image-uploader>
+
+  <button
+    (click)="handleSubmit()"
+    [disabled]="carFormGroup.invalid || isPhotoUploadInProgress"
+    class="text-md w-full rounded bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
+    type="submit"
+  >
+    {{ submitLabel }}
+  </button>
+</form>
+
+<rac-modal #modal [fullWidth]="true" identifier="map">
+  <rac-google-maps
+    #maps
+    (onSubmit)="handleLocationSubmit($event); modal.close()"
+    [location]="car?.location"
+  ></rac-google-maps>
+</rac-modal>

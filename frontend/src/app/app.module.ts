@@ -13,6 +13,8 @@ import { UserService } from './services/user.service';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PagesModule } from './pages/pages.module';
+import { AgmCoreModule } from '@agm/core';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,6 +36,11 @@ import { PagesModule } from './pages/pages.module';
       },
     }),
     FontAwesomeModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC0Knyo9t3mD6ryeNJn46WVV8P4tvSi_nU',
+      libraries: ['places'],
+    }),
+    NgxSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

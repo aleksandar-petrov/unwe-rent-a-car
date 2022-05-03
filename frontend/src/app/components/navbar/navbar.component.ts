@@ -5,7 +5,6 @@ import { Role } from '../../models/user.model';
 interface NavbarButton {
   label: string;
   link: string;
-  requiredRoles?: Role[];
 }
 
 @Component({
@@ -35,8 +34,8 @@ export class NavbarComponent implements OnInit {
       link: '/my-cars',
     },
     {
-      label: 'My Rentals',
-      link: '/my-rentals',
+      label: 'Rentals Panel',
+      link: '/rentals-panel/renter-panel/rental-requests',
     },
   ];
 

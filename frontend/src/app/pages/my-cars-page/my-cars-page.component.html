@@ -22,36 +22,8 @@
   </div>
 
   <div *ngIf="carsPage?.totalElements" class="relative mb-6 md:h-full">
-    <div
-      class="flex flex-wrap items-stretch justify-around after:w-1/4 after:content-['']"
-    >
-      <div
-        *ngFor="let car of carsPage?.content"
-        class="mx-10 mb-7 flex w-3/4 flex-col justify-around rounded-3xl bg-gradient-to-br from-rose-800/50 to-white/50 p-5 text-center shadow-2xl shadow-black md:w-1/3 lg:w-1/4"
-      >
-        <div class="text-shadow-md text-3xl text-white">
-          {{ car?.make }} {{ car?.model }}
-        </div>
-        <div class="text-shadow-md mb-2 text-xl text-white">
-          {{ car?.year }}
-        </div>
-        <img
-          [src]="getFirstCarPhoto(car)"
-          alt="Car"
-          class="mx-auto h-36 w-fit rounded-xl object-cover"
-        />
-        <div class="mt-4 flex w-full items-center justify-center">
-          <button
-            [routerLink]="['/car', 'details', car.id]"
-            class="text-md w-1/3 min-w-fit rounded-xl bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
-            type="submit"
-          >
-            Details
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="pb-7 pt-7">
+      <rac-cars-grid [cars]="carsPage!.content"></rac-cars-grid>
       <rac-paginator
         (onPageChange)="handlePageChange($event)"
         [page]="carsPage"
@@ -61,62 +33,8 @@
 </div>
 
 <rac-modal #modal identifier="createCarModal">
-  <form [formGroup]="createCarFormGroup">
-    <rac-form-control
-      [control]="createCarFormGroup.get('year')"
-      controlName="year"
-      label="Year"
-      placeholder="Enter year"
-      type="select"
-    >
-      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-    </rac-form-control>
-    <rac-form-control
-      [control]="createCarFormGroup.get('make')"
-      controlName="make"
-      label="Make"
-      placeholder="Enter make"
-      type="select"
-    >
-      <option *ngFor="let make of makes" [value]="make">{{ make }}</option>
-    </rac-form-control>
-    <rac-form-control
-      [control]="createCarFormGroup.get('model')"
-      controlName="model"
-      label="Model"
-      placeholder="Enter model"
-      type="text"
-    >
-    </rac-form-control>
-    <rac-form-control
-      [control]="createCarFormGroup.get('mileage')"
-      [min]="1"
-      controlName="mileage"
-      label="Mileage"
-      placeholder="Enter mileage"
-      type="number"
-    ></rac-form-control>
-    <rac-form-control
-      [control]="createCarFormGroup.get('transmission')"
-      controlName="transmission"
-      label="Transmission"
-      placeholder="Enter transmission"
-      type="select"
-    >
-      <option value="MANUAL">MANUAL</option>
-      <option value="AUTOMATIC">AUTOMATIC</option>
-    </rac-form-control>
-    <rac-image-uploader
-      (onImageChange)="handleImageChange($event)"
-    ></rac-image-uploader>
-
-    <button
-      (click)="handleCreate()"
-      [disabled]="createCarFormGroup.invalid || isPhotoUploadInProgress"
-      class="text-md w-full rounded bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
-      type="submit"
-    >
-      Create
-    </button>
-  </form>
+  <rac-car-form
+    (onSubmit)="handleCreateFormSubmitted($event)"
+    submitLabel="Create"
+  ></rac-car-form>
 </rac-modal>

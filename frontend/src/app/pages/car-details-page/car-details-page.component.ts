@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CarResponse } from '../../models/car.model';
-import { map } from 'rxjs/operators';
+import { CarCreateRequest, CarResponse } from '../../models/car.model';
+import { map, tap } from 'rxjs/operators';
 import { EMPTY, switchMap } from 'rxjs';
 import { CarService } from '../../services/car.service';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { UserService } from '../../services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'rac-car-details-page',
@@ -12,27 +15,37 @@ import { CarService } from '../../services/car.service';
 })
 export class CarDetailsPageComponent implements OnInit {
   car: CarResponse | undefined;
+  isViewerOwner: boolean = false;
+  firstCarPhoto: string = 'assets/images/no-image-car.jpg';
+  shouldShowControls: boolean = true;
+
+  @ViewChild('modal') editCarModal!: ModalComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private carService: CarService
+    private carService: CarService,
+    private userService: UserService,
+    private toastrService: ToastrService
   ) {}
 
-  get firstCarPhoto(): string {
+  setCar(car: CarResponse): void {
+    this.car = car;
+    this.setFirstCarPhoto();
+    this.setShouldShowControls();
+  }
+
+  setShouldShowControls(): void {
+    this.shouldShowControls = (this.car?.photos?.length || 0) > 1;
+  }
+
+  setFirstCarPhoto(): void {
     const photos = this.car?.photos;
     if (!photos || photos.length === 0) {
-      return 'assets/images/no-image-car.jpg';
+      this.firstCarPhoto = 'assets/images/no-image-car.jpg';
+      return;
     }
 
-    return this.car!.photos[0].url;
-  }
-
-  get shouldShowControls(): boolean {
-    return (this.car?.photos?.length || 0) > 1;
-  }
-
-  get photoUrls(): string[] {
-    return this.car?.photos.map((p) => p.url) || [];
+    this.firstCarPhoto = this.car!.photos[0].url;
   }
 
   ngOnInit(): void {
@@ -47,10 +60,35 @@ export class CarDetailsPageComponent implements OnInit {
           }
 
           return this.carService.get(id);
-        })
+        }),
+        tap((car) => {
+          this.setCar(car);
+        }),
+        switchMap(() => this.userService.userId$)
+      )
+      .subscribe((userId) => {
+        this.isViewerOwner = userId === this.car?.owner.id;
+      });
+  }
+
+  handleEditFormSubmitted(form: CarCreateRequest) {
+    this.carService
+      .edit(this.car!.id, form)
+      .pipe(
+        tap(() => this.editCarModal.close()),
+        switchMap(() => this.carService.get(this.car!.id))
       )
       .subscribe((car) => {
-        this.car = car;
+        this.setCar(car);
+        this.toastrService.success(
+          'You have successfully modified your car.',
+          undefined,
+          { positionClass: 'toast-bottom-right' }
+        );
       });
+  }
+
+  handleEditModalClose() {
+    this.car = JSON.parse(JSON.stringify(this.car));
   }
 }

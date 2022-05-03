@@ -14,7 +14,6 @@ import Viewer from 'viewerjs';
 })
 export class ImageViewerDirective implements AfterViewInit, OnDestroy {
   @Input() viewerOptions: Viewer.Options = {};
-  @Input() photoUrls: string[] = [];
 
   @Output() viewerReady: EventEmitter<Event> = new EventEmitter<Event>();
   @Output() viewerShow: EventEmitter<Event> = new EventEmitter<Event>();
@@ -34,11 +33,11 @@ export class ImageViewerDirective implements AfterViewInit, OnDestroy {
     this.nativeElement = this.elementRef.nativeElement;
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.initViewer();
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     if (this.instance) {
       this.instance.destroy();
     }

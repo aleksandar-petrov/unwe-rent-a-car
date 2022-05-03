@@ -71,3 +71,27 @@ $transition-duration: 1000ms;
 }
 
 @import '~viewerjs/dist/viewer.css';
+
+.pac-container {
+  z-index: 9999999 !important;
+}
+
+.modal-dialog, .nsm-dialog {
+  max-width: none;
+}
+
+.ngx-slider-pointer {
+  background-color: #a23242 !important;
+
+  &.ngx-slider-active:after {
+    background-color: darkgray !important;
+  }
+}
+
+.ngx-slider-bubble {
+  color: white !important;
+}
+
+.ngx-slider-selection {
+  background-color: #a23242 !important;
+}

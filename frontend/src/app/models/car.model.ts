@@ -1,4 +1,5 @@
 import { PhotoResponse } from './photo.model';
+import { LocationRequest, LocationResponse } from './location.model';
 
 export interface CarCreateRequest {
   year: number;
@@ -7,6 +8,9 @@ export interface CarCreateRequest {
   mileage: number;
   transmission: CarTransmission;
   photosIds: string[];
+  pricePerDay: number;
+  status: CarStatus;
+  location: LocationRequest;
 }
 
 export interface CarResponse {
@@ -18,6 +22,9 @@ export interface CarResponse {
   transmission: CarTransmission;
   photos: PhotoResponse[];
   owner: OwnerResponse;
+  pricePerDay: number;
+  status: CarStatus;
+  location: LocationResponse;
 }
 
 export enum CarTransmission {
@@ -25,8 +32,56 @@ export enum CarTransmission {
   AUTOMATIC = 'AUTOMATIC',
 }
 
+export enum CarStatus {
+  PUBLIC = 'PUBLIC',
+  HIDDEN = 'HIDDEN',
+}
+
 export interface OwnerResponse {
   id: string;
   firstName: string;
   lastName: string;
+  phoneNumber: string;
+}
+
+export interface CarGetAllRequest {
+  ownerId?: string;
+  page: number;
+  search?: CarSearchRequest;
+}
+
+export interface CarSearch {
+  countries: CountryResponse[];
+  makes: MakeResponse[];
+  minYear: number;
+  maxYear: number;
+  minMileage: number;
+  maxMileage: number;
+  minPricePerDay: number;
+  maxPricePerDay: number;
+}
+
+export interface CountryResponse {
+  name: string;
+  cities: string[];
+}
+
+export interface MakeResponse {
+  name: string;
+  models: string[];
+}
+
+export interface CarSearchRequest {
+  country?: string;
+  city?: string;
+  make?: string;
+  model?: string;
+  minYear?: number;
+  maxYear?: number;
+  minMileage?: number;
+  maxMileage?: number;
+  minPricePerDay?: number;
+  maxPricePerDay?: number;
+  sortBy?: string;
+  sortDirection?: string;
 }

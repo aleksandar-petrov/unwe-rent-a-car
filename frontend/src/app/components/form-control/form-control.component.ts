@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
 })
 export class FormControlComponent implements OnInit {
   @Input() label: string = '';
+  @Input() labelTextClass: string = 'text-gray-700';
   @Input() placeholder: string = '';
   @Input() controlName: string = '';
   @Input() type: string = '';
@@ -15,6 +16,8 @@ export class FormControlComponent implements OnInit {
   @Input()
   validationMessage: string = '';
   @Input() min: number | undefined;
+  @Input() typingDisabled: boolean = false;
+  @Output() onClick = new EventEmitter<void>();
 
   constructor() {}
 
@@ -42,5 +45,14 @@ export class FormControlComponent implements OnInit {
     }
 
     return type === 'standard' && !['select', 'checkbox'].includes(this.type);
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.typingDisabled) {
+      return;
+    }
+
+    event.preventDefault();
+    return false;
   }
 }

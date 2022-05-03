@@ -36,8 +36,19 @@
               <groupId>org.mapstruct</groupId>
               <version>${org.mapstruct.version}</version>
             </path>
+            <path>
+              <artifactId>querydsl-apt</artifactId>
+              <groupId>com.querydsl</groupId>
+              <version>${querydsl.version}</version>
+            </path>
             <!-- other annotation processors -->
           </annotationProcessorPaths> <!-- depending on your project -->
+          <annotationProcessors>
+            <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor
+            </annotationProcessor>
+            <annotationProcessor>com.querydsl.apt.jpa.JPAAnnotationProcessor</annotationProcessor>
+            <annotationProcessor>org.mapstruct.ap.MappingProcessor</annotationProcessor>
+          </annotationProcessors>
           <source>11</source> <!-- depending on your project -->
           <target>11</target>
         </configuration>
@@ -93,6 +104,16 @@
       <groupId>software.amazon.awssdk</groupId>
       <version>2.17.176</version>
     </dependency>
+    <dependency>
+      <artifactId>querydsl-jpa</artifactId>
+      <groupId>com.querydsl</groupId>
+      <version>${querydsl.version}</version>
+    </dependency>
+    <dependency>
+      <artifactId>querydsl-apt</artifactId>
+      <groupId>com.querydsl</groupId>
+      <version>${querydsl.version}</version>
+    </dependency>
 
 
     <dependency>
@@ -129,6 +150,7 @@
   <properties>
     <java.version>11</java.version>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+    <querydsl.version>5.0.0</querydsl.version>
   </properties>
 
   <version>0.0.1-SNAPSHOT</version>

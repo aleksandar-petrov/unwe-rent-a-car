@@ -46,7 +46,7 @@
         id="navbarContent"
       >
         <ul class="navbar-nav mr-auto flex flex-col md:flex-row">
-          <li class="nav-item">
+          <li *ngIf="isUserAdmin" class="nav-item">
             <a
               [attr.data-bs-toggle]="isScreenMd ? null : 'collapse'"
               class="nav-link block p-2 text-2xl text-white transition duration-300 ease-in-out hover:text-gray-700"

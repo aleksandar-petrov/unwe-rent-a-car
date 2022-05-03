@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, lastValueFrom, Observable, skipWhile } from 'rxjs';
-import { AccessToken, Role, User } from '../models/user.model';
+import {
+  AccessToken,
+  AnyUserExistsRequest,
+  Role,
+  User,
+} from '../models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import {
   HttpClient,
@@ -77,9 +82,20 @@ export class UserService {
     );
   }
 
-  anyUserExists(email: string): Observable<boolean> {
+  anyUserExists(model: AnyUserExistsRequest): Observable<boolean> {
+    let params = new HttpParams();
+    if (model.email) {
+      params = params.append('email', model.email);
+    }
+    if (model.phoneNumber) {
+      params = params.append(
+        'phoneNumber',
+        model.phoneNumber.replace('+', '%2B')
+      );
+    }
+
     return this.http.get<boolean>(`${environment.API_URL}/users/any`, {
-      params: new HttpParams().append('email', email),
+      params,
     });
   }
 
