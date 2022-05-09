@@ -11,23 +11,30 @@ import { CarDetailsPageComponent } from './pages/car-details-page/car-details-pa
 import { ExplorePageComponent } from './pages/explore-page/explore-page.component';
 import { RentalsPanelPageComponent } from './pages/rentals-panel-page/rentals-panel-page.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
+import { AppInitializedGuard } from './guards/app-initialized.guard';
+import { AppUninitializedGuard } from './guards/app-uninitialized.guard';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     component: GuestPageComponent,
-    canActivate: [LoggedGuard],
+    canActivate: [AppInitializedGuard, LoggedGuard],
   },
   {
     path: 'login',
     component: LoginPageComponent,
-    canActivate: [LoggedGuard],
+    canActivate: [AppInitializedGuard, LoggedGuard],
   },
   {
     path: 'register',
     component: RegisterPageComponent,
-    canActivate: [LoggedGuard],
+    canActivate: [AppInitializedGuard, LoggedGuard],
+  },
+  {
+    path: 'initialize',
+    component: RegisterPageComponent,
+    canActivate: [AppUninitializedGuard],
   },
   {
     path: 'explore',
@@ -43,6 +50,10 @@ const routes: Routes = [
     path: 'rentals-panel/:panel-type/:rental-type',
     component: RentalsPanelPageComponent,
     canActivate: [UserGuard],
+  },
+  {
+    path: 'rentals-panel',
+    redirectTo: 'rentals-panel/renter-panel/rental-requests',
   },
   {
     path: 'car/details/:id',

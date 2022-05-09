@@ -120,12 +120,20 @@
       Modify your car
     </button>
     <button
-      (click)="editCarModal.open()"
+      (click)="rentalRequestModal.open()"
       *ngIf="!isViewerOwner"
       class="text-md text-shadow-md mt-3 mb-1 w-full rounded-3xl bg-black/50 p-5 text-xl leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-black/60 hover:shadow-lg focus:bg-black/60 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-black/60 active:shadow-lg"
       type="submit"
     >
       Request Rental
+    </button>
+    <button
+      *ngIf="!isViewerOwner"
+      class="text-md text-shadow-md mt-3 mb-1 w-full rounded-3xl bg-black/50 p-5 text-xl leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-black/60 hover:shadow-lg focus:bg-black/60 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-black/60 active:shadow-lg"
+      type="submit"
+    >
+      <fa-icon [icon]="faCheck" size="lg"></fa-icon>
+      Rental Request Sent
     </button>
     <div class="w-full">
       <hr class="my-4" />
@@ -157,7 +165,7 @@
 </div>
 
 <rac-modal
-  #modal
+  #editCarModal
   (onClose)="handleEditModalClose()"
   *ngIf="car"
   identifier="editCarModal"
@@ -167,4 +175,10 @@
     [car]="car"
     submitLabel="Modify"
   ></rac-car-form>
+</rac-modal>
+<rac-modal #rentalRequestModal *ngIf="car" identifier="rentalRequestModal">
+  <rac-rental-request-form
+    (onSubmit)="handleRentalRequestSubmit($event)"
+    [pricePerDay]="car.pricePerDay"
+  ></rac-rental-request-form>
 </rac-modal>

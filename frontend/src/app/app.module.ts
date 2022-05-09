@@ -15,6 +15,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PagesModule } from './pages/pages.module';
 import { AgmCoreModule } from '@agm/core';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
       libraries: ['places'],
     }),
     NgxSliderModule,
+    NgxDaterangepickerMd.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

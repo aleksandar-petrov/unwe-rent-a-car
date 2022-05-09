@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, lastValueFrom, Observable, skipWhile } from 'rxjs';
+import {
+  BehaviorSubject,
+  lastValueFrom,
+  Observable,
+  skipWhile,
+  tap,
+} from 'rxjs';
 import {
   AccessToken,
   AnyUserExistsRequest,
@@ -32,6 +38,8 @@ export class UserService {
     map((user) => user!.id)
   );
   user$ = this.userSubject$.asObservable();
+  private readonly anyUserExistsSubject$ = new BehaviorSubject<boolean>(true);
+  anyUserExists$ = this.anyUserExistsSubject$.asObservable();
 
   constructor(
     private jwtService: JwtHelperService,
@@ -76,13 +84,16 @@ export class UserService {
   }
 
   register(req: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(
-      `${environment.API_URL}/users`,
-      req
-    );
+    return this.http
+      .post<RegisterResponse>(`${environment.API_URL}/users`, req)
+      .pipe(
+        tap(() => {
+          this.anyUserExistsSubject$.next(true);
+        })
+      );
   }
 
-  anyUserExists(model: AnyUserExistsRequest): Observable<boolean> {
+  anyUserExists(model: AnyUserExistsRequest = {}): Observable<boolean> {
     let params = new HttpParams();
     if (model.email) {
       params = params.append('email', model.email);
@@ -105,6 +116,17 @@ export class UserService {
     UserService.TOKEN = null;
 
     this.router.navigate(['/']);
+  }
+
+  initialize() {
+    this.autoLogin();
+    this.anyUserExists().subscribe((anyUserExists) => {
+      this.anyUserExistsSubject$.next(anyUserExists);
+
+      if (!anyUserExists) {
+        this.router.navigateByUrl('/initialize');
+      }
+    });
   }
 
   private updateUser(token: string) {

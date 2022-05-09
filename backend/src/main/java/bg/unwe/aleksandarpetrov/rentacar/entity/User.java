@@ -1,6 +1,6 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
-import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.base.IdentifiableTimestampEntity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
+public class User extends IdentifiableTimestampEntity implements UserDetails {
 
   @Column(nullable = false)
   private String firstName;

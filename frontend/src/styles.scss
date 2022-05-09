@@ -95,3 +95,17 @@ $transition-duration: 1000ms;
 .ngx-slider-selection {
   background-color: #a23242 !important;
 }
+
+.md-drppicker {
+  display: block !important;
+
+  .calendar {
+    margin: 0 auto !important;
+    float: none !important;
+  }
+}
+
+.md-drppicker td.active, .md-drppicker td.active:hover {
+  background-color: #a23242 !important;
+}
+

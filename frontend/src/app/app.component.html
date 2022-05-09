@@ -1,4 +1,4 @@
-<rac-navbar></rac-navbar>
+<rac-navbar *ngIf="isAppInitialized$ | async"></rac-navbar>
 <rac-video-background-router-wrapper>
   <router-outlet></router-outlet>
 </rac-video-background-router-wrapper>

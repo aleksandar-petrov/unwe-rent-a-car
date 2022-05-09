@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
     },
     {
       label: 'Rentals Panel',
-      link: '/rentals-panel/renter-panel/rental-requests',
+      link: '/rentals-panel',
     },
   ];
 

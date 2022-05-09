@@ -8,7 +8,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  isAppInitialized$ = this.userService.anyUserExists$;
+
   constructor(private userService: UserService, private http: HttpClient) {
-    userService.autoLogin();
+    userService.initialize();
   }
 }

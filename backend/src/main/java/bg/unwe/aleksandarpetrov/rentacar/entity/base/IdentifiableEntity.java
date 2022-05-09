@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 @ToString
 @RequiredArgsConstructor
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class IdentifiableEntity {
 
   @Id
   @GeneratedValue(generator = "uuid-string")

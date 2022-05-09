@@ -7,6 +7,9 @@ import { CarService } from '../../services/car.service';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { RentalRequestForm } from '../../models/rental.model';
+import { RentalService } from '../../services/rental.service';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'rac-car-details-page',
@@ -19,13 +22,17 @@ export class CarDetailsPageComponent implements OnInit {
   firstCarPhoto: string = 'assets/images/no-image-car.jpg';
   shouldShowControls: boolean = true;
 
-  @ViewChild('modal') editCarModal!: ModalComponent;
+  faCheck = faCheck;
+
+  @ViewChild('editCarModal') editCarModal!: ModalComponent;
+  @ViewChild('rentalRequestModal') rentalRequestModal!: ModalComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private carService: CarService,
     private userService: UserService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private rentalService: RentalService
   ) {}
 
   setCar(car: CarResponse): void {
@@ -90,5 +97,15 @@ export class CarDetailsPageComponent implements OnInit {
 
   handleEditModalClose() {
     this.car = JSON.parse(JSON.stringify(this.car));
+  }
+
+  handleRentalRequestSubmit(form: RentalRequestForm) {
+    this.rentalRequestModal.close();
+    this.rentalService
+      .create({
+        ...form,
+        carId: this.car!.id,
+      })
+      .subscribe(console.log);
   }
 }

@@ -24,8 +24,8 @@ export class SliderComponent implements OnInit {
 
   ngOnInit(): void {
     this.options = {
-      floor: this.minValue,
-      ceil: this.maxValue,
+      floor: this.minValue || 0,
+      ceil: this.maxValue || 10000,
       animate: true,
       animateOnMove: true,
       translate: (value: number, label: LabelType): string => {

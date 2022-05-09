@@ -13,7 +13,6 @@ import bg.unwe.aleksandarpetrov.rentacar.repository.CarRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.PhotoRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.UserRepository;
 import bg.unwe.aleksandarpetrov.rentacar.service.CarService;
-import bg.unwe.aleksandarpetrov.rentacar.service.KeyValuesListSearchProducer;
 import bg.unwe.aleksandarpetrov.rentacar.service.MappingService;
 import bg.unwe.aleksandarpetrov.rentacar.service.PhotoService;
 import bg.unwe.aleksandarpetrov.rentacar.service.TransliterationService;
@@ -166,8 +165,7 @@ public class CarServiceImpl implements CarService {
   }
 
   private <KVS extends KeyValueSearch, KVLS extends KeyValuesListSearch>
-      List<KVLS> getKeyValuesListSearch(
-          List<KVS> keyValueSearchList, KeyValuesListSearchProducer<KVLS> producer) {
+      List<KVLS> getKeyValuesListSearch(List<KVS> keyValueSearchList, Supplier<KVLS> supplier) {
     var map = new HashMap<String, List<String>>();
     keyValueSearchList.forEach(
         v -> {
@@ -178,7 +176,7 @@ public class CarServiceImpl implements CarService {
     return map.keySet().stream()
         .map(
             k -> {
-              var keyValuesListSearch = producer.produce();
+              var keyValuesListSearch = supplier.get();
 
               keyValuesListSearch.setKey(k);
               keyValuesListSearch.setList(map.get(k));

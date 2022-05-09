@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'rac-video-background-router-wrapper',
@@ -9,8 +10,9 @@ import { filter } from 'rxjs';
 })
 export class VideoBackgroundRouterWrapperComponent implements OnInit {
   shouldBlurVideo: boolean = true;
+  isNavbarVisible$ = this.userService.anyUserExists$;
 
-  constructor(private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.router.events

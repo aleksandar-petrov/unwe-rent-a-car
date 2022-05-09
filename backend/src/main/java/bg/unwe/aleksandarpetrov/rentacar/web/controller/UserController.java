@@ -27,8 +27,11 @@ public class UserController {
   public boolean userExists(
       @RequestParam(required = false) String email,
       @RequestParam(required = false) String phoneNumber) {
-    return userService.userExists(
-        new AnyUserExistsRequest(email, URLDecoder.decode(phoneNumber, StandardCharsets.UTF_8)));
+    if (phoneNumber != null) {
+      phoneNumber = URLDecoder.decode(phoneNumber, StandardCharsets.UTF_8);
+    }
+
+    return userService.userExists(new AnyUserExistsRequest(email, phoneNumber));
   }
 
   @PostMapping

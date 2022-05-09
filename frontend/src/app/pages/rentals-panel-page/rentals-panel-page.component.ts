@@ -7,8 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./rentals-panel-page.component.scss'],
 })
 export class RentalsPanelPageComponent implements OnInit {
+  readonly RENTALS_PANEL = '/rentals-panel';
+
   panelType!: string;
   rentalType!: string;
+  PanelType = PanelType;
+  RentalType = RentalType;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
@@ -16,13 +20,29 @@ export class RentalsPanelPageComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
       const panelType = paramMap.get(PanelType.KEY);
       if (!PanelType.TYPES.includes(panelType || '')) {
-        this.router.navigateByUrl('/404');
+        this.router.navigate([
+          this.RENTALS_PANEL,
+          PanelType.RENTER_PANEL,
+          RentalType.RENTAL_REQUESTS,
+        ]);
+
+        return;
       }
+
+      this.panelType = panelType!;
 
       const rentalType = paramMap.get(RentalType.KEY);
       if (!RentalType.TYPES.includes(rentalType || '')) {
-        this.router.navigateByUrl('/404');
+        this.router.navigate([
+          this.RENTALS_PANEL,
+          this.panelType,
+          RentalType.RENTAL_REQUESTS,
+        ]);
+
+        return;
       }
+
+      this.rentalType = rentalType!;
     });
   }
 }

@@ -1,4 +1,5 @@
 <div
+  *ngIf="cars.length > 0"
   class="flex flex-wrap items-stretch justify-around 2xl:after:w-1/4 2xl:after:content-['']"
 >
   <div
@@ -41,4 +42,10 @@
       <div class="text-shadow-md text-xl">Price per day</div>
     </div>
   </div>
+</div>
+
+<div *ngIf="!cars || cars.length === 0">
+  <h1 class="text-shadow-md mt-56 text-center text-7xl text-white">
+    No cars found.
+  </h1>
 </div>

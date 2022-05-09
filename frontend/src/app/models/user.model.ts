@@ -22,3 +22,10 @@ export interface AnyUserExistsRequest {
   email?: string;
   phoneNumber?: string;
 }
+
+export interface UserContactResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}

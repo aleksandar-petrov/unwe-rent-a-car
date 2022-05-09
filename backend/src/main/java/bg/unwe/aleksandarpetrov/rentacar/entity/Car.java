@@ -1,6 +1,6 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
-import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.base.IdentifiableTimestampEntity;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.CarStatus;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.CarTransmission;
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ import lombok.ToString.Exclude;
 @AllArgsConstructor
 @Entity
 @Table(name = "cars")
-public class Car extends BaseEntity {
+public class Car extends IdentifiableTimestampEntity {
 
   @Column(nullable = false)
   private Integer year;

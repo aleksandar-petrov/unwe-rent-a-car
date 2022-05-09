@@ -1,9 +1,9 @@
-package bg.unwe.aleksandarpetrov.rentacar.web.payload.car;
+package bg.unwe.aleksandarpetrov.rentacar.web.payload.user;
 
 import lombok.Data;
 
 @Data
-public class OwnerResponse {
+public class UserContactResponse {
 
   private String id;
 

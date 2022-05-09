@@ -1,32 +1,40 @@
 <ul
-  class="mx-auto mb-4 flex list-none flex-wrap overflow-hidden border-b-0 bg-black/50 pl-0 text-white md:w-1/2 md:rounded-3xl"
+  class="mx-auto mb-4 flex list-none flex-wrap overflow-hidden border-b-0 bg-rose-800/40 pl-0 text-white md:w-1/2 md:rounded-3xl"
 >
   <li class="w-1/2 flex-auto text-center">
     <a
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gray-100/50 focus:border-transparent"
+      [routerLinkActive]="['!bg-gradient-to-r', '!from-neutral-100/60']"
+      [routerLink]="[RENTALS_PANEL, PanelType.RENTER_PANEL, rentalType]"
+      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-r hover:from-neutral-100/20 focus:border-transparent"
       >Renter Panel</a
     >
   </li>
   <li class="w-1/2 flex-auto text-center">
     <a
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gray-100/50 focus:border-transparent"
+      [routerLinkActive]="['!bg-gradient-to-l', '!from-neutral-100/60']"
+      [routerLink]="[RENTALS_PANEL, PanelType.OWNER_PANEL, rentalType]"
+      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-l hover:from-neutral-100/20 focus:border-transparent"
       >Owner Panel</a
     >
   </li>
 </ul>
 <ul
-  class="mx-auto mb-4 flex list-none flex-wrap overflow-hidden border-b-0 bg-black/50 pl-0 text-white md:w-2/3 md:rounded-3xl lg:w-1/2"
+  class="mx-auto mb-4 flex list-none flex-wrap overflow-hidden border-b-0 bg-black/50 pl-0 text-center text-white md:w-2/3 md:rounded-3xl lg:w-1/2"
 >
-  <li class="w-1/2 flex-auto text-center">
+  <li class="w-1/2">
     <a
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gray-100/50 focus:border-transparent"
-      >Rental Requests</a
+      [routerLinkActive]="['!border-transparent', '!bg-gray-100/50']"
+      [routerLink]="[RENTALS_PANEL, panelType, RentalType.RENTAL_REQUESTS]"
+      class="text-shadow-md block h-full w-full cursor-pointer border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
+      >Rental Requests (0)</a
     >
   </li>
-  <li class="w-1/2 flex-auto text-center">
+  <li class="w-1/2">
     <a
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gray-100/50 focus:border-transparent"
-      >Rentals</a
+      [routerLinkActive]="['!border-transparent', '!bg-gray-100/50']"
+      [routerLink]="[RENTALS_PANEL, panelType, RentalType.RENTALS]"
+      class="text-shadow-md block h-full w-full cursor-pointer border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
+      >Rentals (0)</a
     >
   </li>
 </ul>

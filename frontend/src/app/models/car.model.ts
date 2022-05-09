@@ -1,5 +1,6 @@
 import { PhotoResponse } from './photo.model';
 import { LocationRequest, LocationResponse } from './location.model';
+import { UserContactResponse } from './user.model';
 
 export interface CarCreateRequest {
   year: number;
@@ -21,7 +22,7 @@ export interface CarResponse {
   mileage: number;
   transmission: CarTransmission;
   photos: PhotoResponse[];
-  owner: OwnerResponse;
+  owner: UserContactResponse;
   pricePerDay: number;
   status: CarStatus;
   location: LocationResponse;
@@ -35,13 +36,6 @@ export enum CarTransmission {
 export enum CarStatus {
   PUBLIC = 'PUBLIC',
   HIDDEN = 'HIDDEN',
-}
-
-export interface OwnerResponse {
-  id: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
 }
 
 export interface CarGetAllRequest {

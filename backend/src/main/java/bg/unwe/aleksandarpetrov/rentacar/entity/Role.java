@@ -1,6 +1,6 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
-import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.base.IdentifiableTimestampEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -18,7 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role extends BaseEntity implements GrantedAuthority {
+public class Role extends IdentifiableTimestampEntity implements GrantedAuthority {
 
   private String name;
 

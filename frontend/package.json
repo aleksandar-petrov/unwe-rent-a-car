@@ -24,6 +24,8 @@
     "@fortawesome/angular-fontawesome": "^0.10.2",
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
     "@fortawesome/free-solid-svg-icons": "^6.1.0",
+    "moment": "^2.29.3",
+    "ngx-daterangepicker-material": "^2.4.2",
     "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",

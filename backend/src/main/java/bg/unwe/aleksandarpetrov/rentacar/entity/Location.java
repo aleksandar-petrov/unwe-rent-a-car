@@ -1,6 +1,6 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
-import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.base.IdentifiableTimestampEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,7 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Entity
 @Table(name = "locations")
-public class Location extends BaseEntity {
+public class Location extends IdentifiableTimestampEntity {
 
   @Column(nullable = false)
   private Double latitude;

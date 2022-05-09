@@ -1,0 +1,36 @@
+<div *ngIf="rentalRequestForm.valid" class="mb-2 rounded-t-xl bg-black/50">
+  <h1 class="text-shadow-md py-4 text-center text-2xl text-white">
+    Rent from: {{ rentalRequestForm.get("rentedFrom")?.value }}
+  </h1>
+  <hr />
+  <h1 class="text-shadow-md py-4 text-center text-2xl text-white">
+    Rent to: {{ rentalRequestForm.get("rentedTo")?.value }}
+  </h1>
+</div>
+
+<ngx-daterangepicker-material
+  #dateRangePicker
+  (datesUpdated)="handleDatesUpdated($event)"
+  [autoApply]="true"
+  [isInvalidDate]="isInvalidDate"
+  [minDate]="minDate!"
+>
+</ngx-daterangepicker-material>
+
+<div *ngIf="rentalRequestForm.valid" class="mb-3 rounded-b-xl bg-black/50 py-4">
+  <h1 class="text-shadow-md mb-4 text-center text-2xl text-white">
+    {{ daysDiff }} days x {{ pricePerDay }}$ per day
+  </h1>
+  <hr />
+  <h1 class="text-shadow-md pt-4 text-center text-2xl text-white">
+    {{ daysDiff * pricePerDay }}$
+  </h1>
+</div>
+<button
+  (click)="handleSubmit()"
+  [disabled]="rentalRequestForm.invalid"
+  class="text-md w-full rounded bg-rose-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
+  type="submit"
+>
+  Send request
+</button>

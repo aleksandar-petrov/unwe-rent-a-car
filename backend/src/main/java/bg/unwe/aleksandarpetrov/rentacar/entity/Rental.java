@@ -1,7 +1,8 @@
 package bg.unwe.aleksandarpetrov.rentacar.entity;
 
-import bg.unwe.aleksandarpetrov.rentacar.entity.base.BaseEntity;
+import bg.unwe.aleksandarpetrov.rentacar.entity.base.IdentifiableTimestampEntity;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.RentalStatus;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Entity
 @Table(name = "rentals")
-public class Rental extends BaseEntity {
+public class Rental extends IdentifiableTimestampEntity {
 
   @Column(nullable = false)
   private LocalDate rentedFrom;
@@ -34,4 +35,15 @@ public class Rental extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private RentalStatus status;
+
+  @Column(nullable = false)
+  private Long days;
+
+  @Column(nullable = false)
+  private BigDecimal pricePerDay;
+
+  @Column(nullable = false)
+  private BigDecimal totalPrice;
+
+  @ManyToOne private Car car;
 }

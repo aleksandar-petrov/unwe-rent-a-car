@@ -41,11 +41,11 @@ public class CarController {
 
   @GetMapping
   public Page<CarResponse> findAll(
-      @RequestParam(required = false) String ownerId,
       @RequestParam(required = false, defaultValue = "1") int page,
+      @RequestParam(required = false) String ownerId,
       CarSearchRequest search,
       @AuthenticationPrincipal User user) {
-    return carService.findAll(new FindAllCarsRequest(ownerId, page, user.getId(), search));
+    return carService.findAll(new FindAllCarsRequest(page, ownerId, user.getId(), search));
   }
 
   @GetMapping("/{id}")

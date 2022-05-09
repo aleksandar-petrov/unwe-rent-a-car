@@ -3,6 +3,7 @@ import {
   AbstractControl,
   AsyncValidatorFn,
   ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import {
   debounceTime,
@@ -24,6 +25,16 @@ export class RacValidators {
     return this.checkIfAnyExists((phoneNumber) => {
       return userService.anyUserExists({ phoneNumber });
     }, 'phoneNumberAlreadyExists');
+  }
+
+  static mustMatch(controlName: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const matchingControl = control.parent?.get(controlName);
+
+      const matches = control.value === matchingControl?.value;
+
+      return matches ? null : { mustMatch: true };
+    };
   }
 
   private static checkIfAnyExists(

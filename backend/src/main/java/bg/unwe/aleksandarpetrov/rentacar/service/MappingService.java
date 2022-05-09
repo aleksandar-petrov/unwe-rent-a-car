@@ -2,6 +2,7 @@ package bg.unwe.aleksandarpetrov.rentacar.service;
 
 import bg.unwe.aleksandarpetrov.rentacar.entity.Car;
 import bg.unwe.aleksandarpetrov.rentacar.entity.Photo;
+import bg.unwe.aleksandarpetrov.rentacar.entity.Rental;
 import bg.unwe.aleksandarpetrov.rentacar.entity.User;
 import bg.unwe.aleksandarpetrov.rentacar.repository.model.MinMaxSearchView;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarCreateRequest;
@@ -10,6 +11,8 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.CarSearchResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.car.MakeResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.location.CountryResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.photo.PhotoPatchRequest;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.user.UserInfoResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.user.UserRegisterRequest;
 import java.util.List;
@@ -38,4 +41,8 @@ public interface MappingService {
 
   CarSearchResponse toCarSearchResponse(
       MinMaxSearchView minMaxSearchView, List<CountryResponse> countries, List<MakeResponse> makes);
+
+  Rental toRental(RentalCreateRequest model);
+
+  RentalResponse toRentalResponse(Rental rental);
 }
