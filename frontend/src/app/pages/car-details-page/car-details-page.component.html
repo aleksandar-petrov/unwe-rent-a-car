@@ -18,7 +18,7 @@
         type="button"
       ></button>
       <button
-        *ngFor="let photo of car?.photos?.slice(1); let i = index"
+        *ngFor="let photo of carPhotos; let i = index"
         [attr.data-bs-slide-to]="i + 1"
         data-bs-target="#carouselIndicators"
         type="button"
@@ -34,7 +34,7 @@
         />
       </div>
       <div
-        *ngFor="let photo of car?.photos?.slice(1); let i = index"
+        *ngFor="let photo of carPhotos; let i = index"
         class="carousel-item float-left w-full"
       >
         <img

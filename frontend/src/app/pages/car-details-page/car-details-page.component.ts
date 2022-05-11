@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RentalRequestForm } from '../../models/rental.model';
 import { RentalService } from '../../services/rental.service';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { PhotoResponse } from '../../models/photo.model';
 
 @Component({
   selector: 'rac-car-details-page',
@@ -20,6 +21,7 @@ export class CarDetailsPageComponent implements OnInit {
   car: CarResponse | undefined;
   isViewerOwner: boolean = false;
   firstCarPhoto: string = 'assets/images/no-image-car.jpg';
+  carPhotos: PhotoResponse[] = [];
   shouldShowControls: boolean = true;
 
   faCheck = faCheck;
@@ -53,6 +55,7 @@ export class CarDetailsPageComponent implements OnInit {
     }
 
     this.firstCarPhoto = this.car!.photos[0].url;
+    this.carPhotos = photos.length > 1 ? this.car!.photos.slice(1) : [];
   }
 
   ngOnInit(): void {

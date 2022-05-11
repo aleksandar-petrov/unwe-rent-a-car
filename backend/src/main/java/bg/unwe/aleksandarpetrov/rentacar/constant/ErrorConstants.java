@@ -8,6 +8,9 @@ public class ErrorConstants {
 
   public static final String DUPLICATE_EMAIL = "Email %s already registered in the system.";
 
+  public static final String DUPLICATE_PHONE_NUMBER =
+      "Phone number %s already registered in the system.";
+
   public static final String PASSWORD_MISMATCH = "Password doesn't match with confirm password.";
 
   public static final String INVALID_PHOTO = "Invalid photo with id - %s.";

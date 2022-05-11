@@ -4,6 +4,7 @@ import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.Role.ROLE
 import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.Role.ROLE_MODERATOR;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.AuthConstants.Role.ROLE_USER;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.DUPLICATE_EMAIL;
+import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.DUPLICATE_PHONE_NUMBER;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.PASSWORD_MISMATCH;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.USER_NOT_FOUND;
 
@@ -11,6 +12,7 @@ import bg.unwe.aleksandarpetrov.rentacar.entity.QUser;
 import bg.unwe.aleksandarpetrov.rentacar.entity.Role;
 import bg.unwe.aleksandarpetrov.rentacar.entity.User;
 import bg.unwe.aleksandarpetrov.rentacar.exception.DuplicateEmailException;
+import bg.unwe.aleksandarpetrov.rentacar.exception.DuplicatePhoneNumberException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.PasswordMismatchException;
 import bg.unwe.aleksandarpetrov.rentacar.repository.RoleRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.UserRepository;
@@ -54,12 +56,17 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserInfoResponse register(UserRegisterRequest model) {
+    if (!model.getPassword().equals(model.getConfirmPassword())) {
+      throw new PasswordMismatchException(PASSWORD_MISMATCH);
+    }
+
     if (userRepository.findFirstByEmail(model.getEmail()).isPresent()) {
       throw new DuplicateEmailException(String.format(DUPLICATE_EMAIL, model.getEmail()));
     }
 
-    if (!model.getPassword().equals(model.getConfirmPassword())) {
-      throw new PasswordMismatchException(PASSWORD_MISMATCH);
+    if (userExists(AnyUserExistsRequest.builder().phoneNumber(model.getPhoneNumber()).build())) {
+      throw new DuplicatePhoneNumberException(
+          String.format(DUPLICATE_PHONE_NUMBER, model.getPhoneNumber()));
     }
 
     var user = mappingService.toUser(model);
