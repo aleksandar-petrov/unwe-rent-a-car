@@ -34,7 +34,7 @@ export class UserService {
   static TOKEN: string | null;
   private readonly userSubject$ = new BehaviorSubject<User | null>(null);
   userId$ = this.userSubject$.pipe(
-    skipWhile((user) => !user),
+    skipWhile((user) => user === null),
     map((user) => user!.id)
   );
   user$ = this.userSubject$.asObservable();

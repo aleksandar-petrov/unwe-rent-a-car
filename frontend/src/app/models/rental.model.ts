@@ -37,4 +37,17 @@ export interface RentalGetAllRequest {
   renterId?: string;
   ownerId?: string;
   carId?: string;
+  isRentalRequest?: boolean;
+  rentalId?: string;
+  status?: RentalStatus;
+}
+
+export interface RentalsCountRequest {
+  renterId?: string;
+  ownerId?: string;
+}
+
+export interface RentalsCountResponse {
+  rentalRequestsCount: number;
+  rentalsCount: number;
 }

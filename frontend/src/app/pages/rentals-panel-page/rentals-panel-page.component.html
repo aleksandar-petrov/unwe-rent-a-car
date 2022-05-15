@@ -3,17 +3,17 @@
 >
   <li class="w-1/2 flex-auto text-center">
     <a
-      [routerLinkActive]="['!bg-gradient-to-r', '!from-neutral-100/60']"
+      [routerLinkActive]="['!bg-gradient-to-r', '!from-neutral-100/90']"
       [routerLink]="[RENTALS_PANEL, PanelType.RENTER_PANEL, rentalType]"
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-r hover:from-neutral-100/20 focus:border-transparent"
+      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-r hover:from-neutral-100/40 focus:border-transparent"
       >Renter Panel</a
     >
   </li>
   <li class="w-1/2 flex-auto text-center">
     <a
-      [routerLinkActive]="['!bg-gradient-to-l', '!from-neutral-100/60']"
+      [routerLinkActive]="['!bg-gradient-to-l', '!from-neutral-100/90']"
       [routerLink]="[RENTALS_PANEL, PanelType.OWNER_PANEL, rentalType]"
-      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-l hover:from-neutral-100/20 focus:border-transparent"
+      class="text-shadow-md block w-full cursor-pointer border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 text-2xl font-bold leading-tight transition-all duration-700 hover:border-transparent hover:bg-gradient-to-l hover:from-neutral-100/40 focus:border-transparent"
       >Owner Panel</a
     >
   </li>
@@ -25,16 +25,46 @@
     <a
       [routerLinkActive]="['!border-transparent', '!bg-gray-100/50']"
       [routerLink]="[RENTALS_PANEL, panelType, RentalType.RENTAL_REQUESTS]"
-      class="text-shadow-md block h-full w-full cursor-pointer border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
-      >Rental Requests (0)</a
+      class="text-shadow-md block flex h-full w-full cursor-pointer items-center justify-center border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
+      >Rental Requests ({{ rentalsCount?.rentalRequestsCount || 0 }})</a
     >
   </li>
   <li class="w-1/2">
     <a
       [routerLinkActive]="['!border-transparent', '!bg-gray-100/50']"
       [routerLink]="[RENTALS_PANEL, panelType, RentalType.RENTALS]"
-      class="text-shadow-md block h-full w-full cursor-pointer border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
-      >Rentals (0)</a
+      class="text-shadow-md block flex h-full w-full cursor-pointer items-center justify-center border-x-0 border-t-0 border-transparent px-6 py-3 text-2xl font-bold transition-all duration-700 hover:border-transparent hover:bg-gray-100/25 focus:border-transparent"
     >
+      <div>Rentals ({{ rentalsCount?.rentalsCount || 0 }})</div>
+    </a>
   </li>
 </ul>
+
+<rac-table
+  [actionRows]="tableActions"
+  [headers]="tableHeaders"
+  [rows]="tableRows"
+></rac-table>
+<div class="mt-5">
+  <rac-paginator [page]="rentalsPage"></rac-paginator>
+</div>
+
+<rac-modal #dialogModal identifier="dialogModal">
+  <h1 class="text-center text-xl">{{ dialogText }}</h1>
+  <div class="mt-10 flex justify-around">
+    <button
+      (click)="dialogHandler()"
+      class="text-md rounded bg-rose-700 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-rose-800 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-900 active:shadow-lg"
+      type="submit"
+    >
+      Yes
+    </button>
+    <button
+      (click)="dialogModal.close()"
+      class="text-md rounded bg-neutral-600 px-6 py-2.5 leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-neutral-700 hover:shadow-lg focus:bg-neutral-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg"
+      type="submit"
+    >
+      Cancel
+    </button>
+  </div>
+</rac-modal>

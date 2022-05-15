@@ -1,10 +1,11 @@
 <div *ngIf="rentalRequestForm.valid" class="mb-2 rounded-t-xl bg-black/50">
   <h1 class="text-shadow-md py-4 text-center text-2xl text-white">
-    Rent from: {{ rentalRequestForm.get("rentedFrom")?.value }}
+    Rent from:
+    {{ rentalRequestForm.get("rentedFrom")?.value | date: "mediumDate" }}
   </h1>
   <hr />
   <h1 class="text-shadow-md py-4 text-center text-2xl text-white">
-    Rent to: {{ rentalRequestForm.get("rentedTo")?.value }}
+    Rent to: {{ rentalRequestForm.get("rentedTo")?.value | date: "mediumDate" }}
   </h1>
 </div>
 

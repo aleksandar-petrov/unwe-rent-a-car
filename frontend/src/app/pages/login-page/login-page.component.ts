@@ -13,7 +13,7 @@ export class LoginPageComponent implements OnInit {
   loginFormGroup: FormGroup = this.fb.group({
     email: [null, [Validators.required, Validators.email]],
     password: [null, Validators.required],
-    rememberMe: [false],
+    rememberMe: [true],
   });
 
   constructor(

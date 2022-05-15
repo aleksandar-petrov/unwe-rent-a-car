@@ -1,34 +1,49 @@
 package bg.unwe.aleksandarpetrov.rentacar.service.impl;
 
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.INVALID_CAR;
+import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.INVALID_RENTAL_OWNER;
+import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.INVALID_RENTAL_RENTER;
 import static bg.unwe.aleksandarpetrov.rentacar.constant.ErrorConstants.INVALID_USER;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import bg.unwe.aleksandarpetrov.rentacar.entity.QRental;
+import bg.unwe.aleksandarpetrov.rentacar.entity.Rental;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.RentalStatus;
 import bg.unwe.aleksandarpetrov.rentacar.exception.ExistingPendingVerificationRentalException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidCarException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidDateRangeException;
+import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidRentalException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidUserException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.RentOwnedCarException;
+import bg.unwe.aleksandarpetrov.rentacar.exception.RentalNotInPendingVerificationStatusException;
 import bg.unwe.aleksandarpetrov.rentacar.repository.CarRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.RentalRepository;
 import bg.unwe.aleksandarpetrov.rentacar.repository.UserRepository;
 import bg.unwe.aleksandarpetrov.rentacar.service.MappingService;
 import bg.unwe.aleksandarpetrov.rentacar.service.RentalService;
+import bg.unwe.aleksandarpetrov.rentacar.service.model.search.RentalsSearch;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.FindAllRentalsRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
-import com.querydsl.core.types.dsl.Expressions;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountRequest;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class RentalServiceImpl implements RentalService {
+
+  private static final QRental RENTAL_PATH = QRental.rental;
 
   private final RentalRepository rentalRepository;
 
@@ -82,30 +97,144 @@ public class RentalServiceImpl implements RentalService {
 
   @Override
   public Page<RentalResponse> findAll(FindAllRentalsRequest model, String userId) {
-    var rentalPath = QRental.rental;
-
-    var predicate = Expressions.TRUE.isTrue();
-
-    if (model.getOwnerId() != null) {
-      predicate = predicate.and(rentalPath.car.owner.id.eq(model.getOwnerId()));
-    }
-
-    if (model.getRenterId() != null) {
-      predicate = predicate.and(rentalPath.renter.id.eq(model.getRenterId()));
-    }
+    var predicate = getBaseRentalsPredicate(model, userId);
 
     if (model.getCarId() != null) {
-      predicate = predicate.and(rentalPath.car.id.eq(model.getCarId()));
+      predicate = predicate.and(RENTAL_PATH.car.id.eq(model.getCarId()));
     }
 
-    if (model.isRentalRequest()) {
-      predicate = predicate.and(rentalPath.status.in(RentalStatus.PENDING_VERIFICATION, RentalStatus.REJECTED));
+    var statusPredicate =
+        predicate.and(RENTAL_PATH.status.in(RentalStatus.STARTED, RentalStatus.FINISHED));
+    if (model.getIsRentalRequest() != null && model.getIsRentalRequest()) {
+      statusPredicate = statusPredicate.not();
     }
 
-    predicate = predicate.and(rentalPath.car.owner.id.eq(userId).or(rentalPath.renter.id.eq(userId)));
+    predicate = predicate.and(statusPredicate);
+
+    if (model.getRentalId() != null) {
+      predicate = predicate.and(RENTAL_PATH.id.eq(model.getRentalId()));
+    }
+
+    if (model.getStatus() != null) {
+      predicate = predicate.and(RENTAL_PATH.status.eq(model.getStatus()));
+    }
 
     return rentalRepository
-        .findAll(predicate, PageRequest.of(model.getPage() - 1, 6))
+        .findAll(
+            predicate,
+            PageRequest.of(
+                model.getPage() - 1, 6, Sort.by(Order.desc("rentedFrom"), Order.desc("rentedTo"))))
         .map(mappingService::toRentalResponse);
+  }
+
+  private BooleanExpression getBaseRentalsPredicate(RentalsSearch search, String userId) {
+    var predicate = RENTAL_PATH.car.owner.id.eq(userId).or(RENTAL_PATH.renter.id.eq(userId));
+
+    if (search.getRenterId() != null) {
+      predicate = predicate.and(RENTAL_PATH.renter.id.eq(search.getRenterId()));
+    }
+
+    if (search.getOwnerId() != null) {
+      predicate = predicate.and(RENTAL_PATH.car.owner.id.eq(search.getOwnerId()));
+    }
+
+    return predicate;
+  }
+
+  @Override
+  public RentalsCountResponse getCount(RentalsCountRequest model, String userId) {
+    var predicate = getBaseRentalsPredicate(model, userId);
+
+    var rentalRequestsCount =
+        rentalRepository.count(
+            predicate.and(
+                RENTAL_PATH.status.in(
+                    RentalStatus.PENDING_VERIFICATION,
+                    RentalStatus.APPROVED,
+                    RentalStatus.REJECTED)));
+
+    var rentalsCount =
+        rentalRepository.count(
+            predicate.and(RENTAL_PATH.status.in(RentalStatus.STARTED, RentalStatus.FINISHED)));
+
+    return new RentalsCountResponse(rentalRequestsCount, rentalsCount);
+  }
+
+  @Override
+  public void delete(String rentalId, String renterId) {
+    var rental =
+        rentalRepository
+            .findFirstByIdAndRenterId(rentalId, renterId)
+            .orElseThrow(
+                () ->
+                    new InvalidRentalException(
+                        String.format(INVALID_RENTAL_RENTER, rentalId, renterId)));
+
+    throwIfNotInPendingVerificationStatus(rental);
+
+    rentalRepository.delete(rental);
+  }
+
+  @Override
+  public void reject(String rentalId, String ownerId) {
+    var rental =
+        rentalRepository
+            .findFirstByIdAndCarOwnerId(rentalId, ownerId)
+            .orElseThrow(
+                () ->
+                    new InvalidRentalException(
+                        String.format(INVALID_RENTAL_OWNER, rentalId, ownerId)));
+
+    throwIfNotInPendingVerificationStatus(rental);
+
+    rental.setStatus(RentalStatus.REJECTED);
+
+    rentalRepository.save(rental);
+  }
+
+  @Override
+  public void approve(String rentalId, String ownerId) {
+    var rental =
+        rentalRepository
+            .findFirstByIdAndCarOwnerId(rentalId, ownerId)
+            .orElseThrow(
+                () ->
+                    new InvalidRentalException(
+                        String.format(INVALID_RENTAL_OWNER, rentalId, ownerId)));
+
+    throwIfNotInPendingVerificationStatus(rental);
+
+    rental.setStatus(RentalStatus.APPROVED);
+
+    if (rental.getRentedFrom().isEqual(LocalDate.now())
+        || rental.getRentedFrom().isBefore(LocalDate.now())) {
+      rental.setStatus(RentalStatus.STARTED);
+    }
+
+    rentalRepository.save(rental);
+  }
+
+  @PostConstruct
+  @Scheduled(cron = "0 0 5 * * *")
+  @Override
+  public void updateOngoingRentals() {
+    var startedRentals =
+        rentalRepository.findAllByStatusAndRentedFrom(RentalStatus.APPROVED, LocalDate.now());
+    startedRentals.forEach(r -> r.setStatus(RentalStatus.STARTED));
+
+    rentalRepository.saveAll(startedRentals);
+
+    var finishedRentals =
+        rentalRepository.findAllByStatusAndRentedTo(
+            RentalStatus.STARTED, LocalDate.now().minusDays(1));
+    finishedRentals.forEach(r -> r.setStatus(RentalStatus.FINISHED));
+
+    rentalRepository.saveAll(finishedRentals);
+  }
+
+  private void throwIfNotInPendingVerificationStatus(Rental rental) {
+    if (rental.getStatus() != RentalStatus.PENDING_VERIFICATION) {
+      throw new RentalNotInPendingVerificationStatusException();
+    }
   }
 }

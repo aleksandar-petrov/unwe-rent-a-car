@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarCreateRequest, CarResponse } from '../../models/car.model';
 import { map, tap } from 'rxjs/operators';
 import { EMPTY, switchMap } from 'rxjs';
@@ -7,7 +7,7 @@ import { CarService } from '../../services/car.service';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { RentalRequestForm } from '../../models/rental.model';
+import { RentalRequestForm, RentalStatus } from '../../models/rental.model';
 import { RentalService } from '../../services/rental.service';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { PhotoResponse } from '../../models/photo.model';
@@ -23,6 +23,7 @@ export class CarDetailsPageComponent implements OnInit {
   firstCarPhoto: string = 'assets/images/no-image-car.jpg';
   carPhotos: PhotoResponse[] = [];
   shouldShowControls: boolean = true;
+  pendingVerificationRentalRouterLink: string | undefined;
 
   faCheck = faCheck;
 
@@ -34,7 +35,8 @@ export class CarDetailsPageComponent implements OnInit {
     private carService: CarService,
     private userService: UserService,
     private toastrService: ToastrService,
-    private rentalService: RentalService
+    private rentalService: RentalService,
+    private router: Router
   ) {}
 
   setCar(car: CarResponse): void {
@@ -74,10 +76,27 @@ export class CarDetailsPageComponent implements OnInit {
         tap((car) => {
           this.setCar(car);
         }),
-        switchMap(() => this.userService.userId$)
+        switchMap(() => this.userService.userId$),
+        tap((userId) => {
+          this.isViewerOwner = userId === this.car?.owner.id;
+        }),
+        switchMap((userId) =>
+          this.rentalService.getAll({
+            carId: this.car?.id,
+            renterId: userId,
+            isRentalRequest: true,
+            status: RentalStatus.PENDING_VERIFICATION,
+          })
+        )
       )
-      .subscribe((userId) => {
-        this.isViewerOwner = userId === this.car?.owner.id;
+      .subscribe((rentalsPage) => {
+        if (rentalsPage.content.length === 0) {
+          return;
+        }
+
+        const rental = rentalsPage.content[0];
+
+        this.pendingVerificationRentalRouterLink = `/rentals-panel/renter-panel/rental-requests?selected=${rental.id}`;
       });
   }
 
@@ -109,6 +128,14 @@ export class CarDetailsPageComponent implements OnInit {
         ...form,
         carId: this.car!.id,
       })
-      .subscribe(console.log);
+      .subscribe((rental) => {
+        this.router.navigateByUrl(
+          `rentals-panel/renter-panel/rental-requests?selected=${rental.id}`
+        );
+      });
+  }
+
+  handlePendingRentalRequest() {
+    this.router.navigateByUrl(this.pendingVerificationRentalRouterLink!);
   }
 }

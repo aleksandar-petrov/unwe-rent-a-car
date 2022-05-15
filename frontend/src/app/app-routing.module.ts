@@ -13,6 +13,8 @@ import { RentalsPanelPageComponent } from './pages/rentals-panel-page/rentals-pa
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { AppInitializedGuard } from './guards/app-initialized.guard';
 import { AppUninitializedGuard } from './guards/app-uninitialized.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { AdminPanelPageComponent } from './pages/admin-panel-page/admin-panel-page.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,11 @@ const routes: Routes = [
     path: 'explore',
     component: ExplorePageComponent,
     canActivate: [UserGuard],
+  },
+  {
+    path: 'admin-panel',
+    component: AdminPanelPageComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'my-cars',

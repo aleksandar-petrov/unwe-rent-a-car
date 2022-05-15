@@ -7,6 +7,7 @@ import { CarFormModule } from '../../components/car-form/car-form.module';
 import { GoogleMapsModule } from '../../components/google-maps/google-maps.module';
 import { RentalRequestFormModule } from '../../components/rental-request-form/rental-request-form.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [CarDetailsPageComponent],
@@ -18,6 +19,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     GoogleMapsModule,
     RentalRequestFormModule,
     FontAwesomeModule,
+    RouterModule,
   ],
 })
 export class CarDetailsPageModule {}
