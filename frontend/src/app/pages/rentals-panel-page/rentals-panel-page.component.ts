@@ -104,6 +104,11 @@ export class RentalsPanelPageComponent implements OnInit {
 
   handlePageChange(page: number) {
     this.page = page;
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { page },
+      queryParamsHandling: 'merge',
+    });
     this.fetchRentals();
   }
 
