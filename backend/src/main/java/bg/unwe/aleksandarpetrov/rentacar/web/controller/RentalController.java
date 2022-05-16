@@ -7,6 +7,7 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsFinancialStatsResponse;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,5 +75,11 @@ public class RentalController {
   @GetMapping("/rental-dates")
   public Set<LocalDate> getRentalDates(@RequestParam String carId) {
     return rentalService.getRentalDates(carId);
+  }
+
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @GetMapping("/financial-stats")
+  public RentalsFinancialStatsResponse getFinancialStats() {
+    return rentalService.getFinancialStats();
   }
 }

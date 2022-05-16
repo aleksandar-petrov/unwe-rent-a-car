@@ -8,6 +8,7 @@ import {
   RentalResponse,
   RentalsCountRequest,
   RentalsCountResponse,
+  RentalsFinancialStatsResponse,
 } from '../models/rental.model';
 import { Page } from '../models/page.model';
 
@@ -86,6 +87,12 @@ export class RentalService {
     return this.http.get<string[]>(
       `${environment.API_URL}/rentals/rental-dates`,
       { params: new HttpParams().append('carId', carId) }
+    );
+  }
+
+  getFinancialStats(): Observable<RentalsFinancialStatsResponse> {
+    return this.http.get<RentalsFinancialStatsResponse>(
+      `${environment.API_URL}/rentals/financial-stats`
     );
   }
 

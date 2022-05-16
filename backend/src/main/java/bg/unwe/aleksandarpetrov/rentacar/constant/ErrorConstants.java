@@ -17,6 +17,8 @@ public class ErrorConstants {
 
   public static final String INVALID_CAR = "Invalid car with id - %s.";
 
+  public static final String LOCKED_CAR = "Car with id - %s is locked.";
+
   public static final String INVALID_RENTAL_RENTER = "Invalid rental with id - %s and renter id %s.";
 
   public static final String INVALID_RENTAL_OWNER = "Invalid rental with id - %s and owner id %s.";

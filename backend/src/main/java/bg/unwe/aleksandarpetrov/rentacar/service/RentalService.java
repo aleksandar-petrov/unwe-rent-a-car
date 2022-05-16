@@ -5,6 +5,7 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsFinancialStatsResponse;
 import java.time.LocalDate;
 import java.util.Set;
 import org.springframework.data.domain.Page;
@@ -26,4 +27,6 @@ public interface RentalService {
   void updateOngoingRentals();
 
   Set<LocalDate> getRentalDates(String carId);
+
+  RentalsFinancialStatsResponse getFinancialStats();
 }

@@ -28,6 +28,7 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse;
+import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsFinancialStatsResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -263,6 +264,11 @@ public class RentalServiceImpl implements RentalService {
     }
 
     return result;
+  }
+
+  @Override
+  public RentalsFinancialStatsResponse getFinancialStats() {
+    return new RentalsFinancialStatsResponse(rentalRepository.findFinishedRentalsTotalPrice());
   }
 
   private void throwIfNotInPendingVerificationStatus(Rental rental) {

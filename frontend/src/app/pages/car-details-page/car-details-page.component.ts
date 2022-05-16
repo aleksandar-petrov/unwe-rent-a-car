@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarCreateRequest, CarResponse } from '../../models/car.model';
-import { map, tap } from 'rxjs/operators';
+import { map, skipWhile, tap } from 'rxjs/operators';
 import { EMPTY, switchMap } from 'rxjs';
 import { CarService } from '../../services/car.service';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -11,6 +11,7 @@ import { RentalRequestForm, RentalStatus } from '../../models/rental.model';
 import { RentalService } from '../../services/rental.service';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { PhotoResponse } from '../../models/photo.model';
+import { Role } from '../../models/user.model';
 
 @Component({
   selector: 'rac-car-details-page',
@@ -20,6 +21,7 @@ import { PhotoResponse } from '../../models/photo.model';
 export class CarDetailsPageComponent implements OnInit {
   car: CarResponse | undefined;
   isViewerOwner: boolean = false;
+  isViewerModerator: boolean = false;
   firstCarPhoto: string = 'assets/images/no-image-car.jpg';
   carPhotos: PhotoResponse[] = [];
   shouldShowControls: boolean = true;
@@ -83,14 +85,16 @@ export class CarDetailsPageComponent implements OnInit {
           this.invalidRentalDatesFetched = true;
           this.invalidRentalDates = invalidRentalDates;
         }),
-        switchMap(() => this.userService.userId$),
-        tap((userId) => {
-          this.isViewerOwner = userId === this.car?.owner.id;
+        switchMap(() => this.userService.user$),
+        skipWhile((u) => u === null),
+        tap((user) => {
+          this.isViewerOwner = user!.id === this.car?.owner.id;
+          this.isViewerModerator = user!.roles.includes(Role.ROLE_MODERATOR);
         }),
-        switchMap((userId) =>
+        switchMap((user) =>
           this.rentalService.getAll({
             carId: this.car?.id,
-            renterId: userId,
+            renterId: user!.id,
             isRentalRequest: true,
             status: RentalStatus.PENDING_VERIFICATION,
           })
@@ -117,7 +121,11 @@ export class CarDetailsPageComponent implements OnInit {
       .subscribe((car) => {
         this.setCar(car);
         this.toastrService.success(
-          'You have successfully modified your car.',
+          `You have successfully modified ${
+            this.isViewerOwner
+              ? 'your'
+              : `${car.owner.firstName} ${car.owner.lastName}'s`
+          } car.`,
           undefined,
           { positionClass: 'toast-bottom-right' }
         );

@@ -1,1 +1,38 @@
-<p>admin-panel-page works!</p>
+<div
+  class="mb-0 mt-5 flex h-full flex-col items-center gap-5 md:mt-0 md:justify-center"
+>
+  <div *ngIf="profitText" class="text-center text-white">
+    <h1 class="text-shadow-md text-3xl font-semibold md:text-6xl">
+      {{ profitText }}
+    </h1>
+    <h2 class="text-shadow-md text-xl font-semibold md:text-3xl">
+      (COMMISSION) x (FINISHED RENTALS) = (PROFIT)
+    </h2>
+  </div>
+  <div class="justify-center gap-5 px-5 text-center md:flex">
+    <a
+      (click)="handleExport(ExportType.USERS)"
+      class="text-shadow-md mb-3 block rounded bg-black/25 px-7 py-3 text-2xl font-bold uppercase leading-snug text-white transition duration-700 ease-in-out hover:bg-white/50 focus:outline-none focus:ring-0 md:mb-0"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      role="button"
+      >Export Users</a
+    >
+    <a
+      (click)="handleExport(ExportType.CARS)"
+      class="text-shadow-md mb-3 block rounded bg-black/25 px-7 py-3 text-2xl font-bold uppercase leading-snug text-white transition duration-700 ease-in-out hover:bg-white/50 focus:outline-none focus:ring-0 md:mb-0"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      role="button"
+      >Export Cars</a
+    >
+    <a
+      (click)="handleExport(ExportType.RENTALS)"
+      class="text-shadow-md mb-3 block rounded bg-black/25 px-7 py-3 text-2xl font-bold uppercase leading-snug text-white transition duration-700 ease-in-out hover:bg-white/50 focus:outline-none focus:ring-0 md:mb-0"
+      data-mdb-ripple="true"
+      data-mdb-ripple-color="light"
+      role="button"
+      >Export Rentals</a
+    >
+  </div>
+</div>

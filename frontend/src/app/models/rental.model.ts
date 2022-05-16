@@ -51,3 +51,7 @@ export interface RentalsCountResponse {
   rentalRequestsCount: number;
   rentalsCount: number;
 }
+
+export interface RentalsFinancialStatsResponse {
+  finishedRentalsTotalPrice?: number;
+}

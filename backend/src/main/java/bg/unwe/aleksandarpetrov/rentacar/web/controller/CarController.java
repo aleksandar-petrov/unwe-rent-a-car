@@ -35,7 +35,7 @@ public class CarController {
     return carService.create(model, user.getId());
   }
 
-  @PreAuthorize("@authService.isUserOwnerOfCar(#user.id, #id)")
+  @PreAuthorize("hasRole('ROLE_MODERATOR') OR @authService.isUserOwnerOfCar(#user.id, #id)")
   @PutMapping("/{id}")
   public void edit(
       @RequestBody @Valid @NotNull CarCreateRequest model,

@@ -1,25 +1,34 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { ExportType } from '../models/export.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CachingService {
-  private static CACHE: { [key: string]: any } = {};
+export class ExportService {
+  private downloadLinkElement: HTMLAnchorElement = document.createElement('a');
 
-  constructor() {
-    const cacheObjJson = localStorage.getItem('cache_obj');
-    if (cacheObjJson) {
-      CachingService.CACHE = JSON.parse(cacheObjJson);
-      delete CachingService.CACHE['current_location'];
-    }
-  }
+  constructor(private http: HttpClient) {}
 
-  put(key: string, value: any) {
-    CachingService.CACHE[key] = value;
-    localStorage.setItem('cache_obj', JSON.stringify(CachingService.CACHE));
-  }
-
-  get(key: string): any {
-    return CachingService.CACHE[key];
+  generate(exportType: ExportType) {
+    return this.http
+      .get<string[]>(`${environment.API_URL}/exports`, {
+        params: new HttpParams().append('exportType', exportType),
+        responseType: 'blob' as 'json',
+      })
+      .subscribe((response: any) => {
+        const dataType = response.type;
+        const binaryData = [];
+        binaryData.push(response);
+        this.downloadLinkElement.href = window.URL.createObjectURL(
+          new Blob(binaryData, { type: dataType })
+        );
+        this.downloadLinkElement.setAttribute(
+          'download',
+          `${exportType.toLowerCase()}-${new Date().toISOString()}.json`
+        );
+        this.downloadLinkElement.click();
+      });
   }
 }

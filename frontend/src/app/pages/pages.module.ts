@@ -7,6 +7,7 @@ import { MyCarsPageModule } from './my-cars-page/my-cars-page.module';
 import { CarDetailsPageModule } from './car-details-page/car-details-page.module';
 import { ExplorePageModule } from './explore-page/explore-page.module';
 import { RentalsPanelPageModule } from './rentals-panel-page/rentals-panel-page.module';
+import { AdminPanelPageModule } from './admin-panel-page/admin-panel-page.module';
 
 @NgModule({
   declarations: [],
@@ -16,6 +17,7 @@ import { RentalsPanelPageModule } from './rentals-panel-page/rentals-panel-page.
     GuestPageModule,
     LoginPageModule,
     RegisterPageModule,
+    AdminPanelPageModule,
     MyCarsPageModule,
     CarDetailsPageModule,
     RentalsPanelPageModule,
