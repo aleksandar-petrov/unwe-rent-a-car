@@ -31,6 +31,7 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -253,17 +254,13 @@ public class RentalServiceImpl implements RentalService {
 
     var rentals = rentalRepository.findAll(predicate, RENTAL_DATES_SORT);
 
-    var result = new TreeSet<>(LocalDate::compareTo);
+    var result = new TreeSet<>(Comparator.comparing(LocalDate::toString));
     for (Rental rental : rentals) {
       result.addAll(
-          LongStream.rangeClosed(0, rental.getDays())
+          LongStream.rangeClosed(0, rental.getDays() - 1)
               .mapToObj(rental.getRentedFrom()::plusDays)
               .collect(Collectors.toSet()));
     }
-
-    // 16 - 20
-    // 12-16
-    //
 
     return result;
   }
