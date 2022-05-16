@@ -179,7 +179,6 @@ public class CarServiceImpl implements CarService {
 
     var minMaxSearchView = carRepository.getMinMaxSearchView();
 
-    System.out.println("ura");
     return mappingService.toCarSearchResponse(minMaxSearchView, countries, makes);
   }
 
