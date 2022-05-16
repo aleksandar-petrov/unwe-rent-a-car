@@ -123,6 +123,9 @@ export class RentalsPanelPageComponent implements OnInit {
 
     this.rentalService.getCount(rentalsSearch).subscribe((rentalsCount) => {
       this.rentalsCount = rentalsCount;
+      if (this.selectedRentalId) {
+        this.rentalsCount.rentalRequestsCount = 1;
+      }
     });
   }
 
@@ -178,6 +181,7 @@ export class RentalsPanelPageComponent implements OnInit {
                   'Are you sure you want to delete your rental request?';
                 this.dialogHandler = () => {
                   this.rentalService.delete(r.id).subscribe(() => {
+                    this.selectedRentalId = undefined;
                     this.fetchRentals();
                     this.dialogModal.close();
                     this.toastrService.success(

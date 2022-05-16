@@ -9,6 +9,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import bg.unwe.aleksandarpetrov.rentacar.entity.QRental;
 import bg.unwe.aleksandarpetrov.rentacar.entity.Rental;
 import bg.unwe.aleksandarpetrov.rentacar.entity.enumeration.RentalStatus;
+import bg.unwe.aleksandarpetrov.rentacar.exception.CarNotAvailableInProvidedDateRangeException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.ExistingPendingVerificationRentalException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidCarException;
 import bg.unwe.aleksandarpetrov.rentacar.exception.InvalidDateRangeException;
@@ -64,6 +65,11 @@ public class RentalServiceImpl implements RentalService {
   public RentalResponse create(RentalCreateRequest model, String renterId) {
     if (model.getRentedTo().isBefore(model.getRentedFrom())) {
       throw new InvalidDateRangeException();
+    }
+
+    var rentalDates = getRentalDates(model.getCarId());
+    if (rentalDates.contains(model.getRentedFrom()) || rentalDates.contains(model.getRentedTo())) {
+      throw new CarNotAvailableInProvidedDateRangeException();
     }
 
     var car =
