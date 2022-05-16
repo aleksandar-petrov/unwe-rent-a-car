@@ -46,7 +46,10 @@
   [rows]="tableRows"
 ></rac-table>
 <div class="mt-5">
-  <rac-paginator [page]="rentalsPage"></rac-paginator>
+  <rac-paginator
+    (onPageChange)="handlePageChange($event)"
+    [page]="rentalsPage"
+  ></rac-paginator>
 </div>
 
 <rac-modal #dialogModal identifier="dialogModal">

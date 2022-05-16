@@ -40,6 +40,7 @@ export class RentalsPanelPageComponent implements OnInit {
   tableActions: Action[][] = [];
   selectedRentalId: string | undefined;
   dialogText: string = '';
+  page: number = 1;
 
   @ViewChild('dialogModal') dialogModal!: ModalComponent;
 
@@ -91,11 +92,19 @@ export class RentalsPanelPageComponent implements OnInit {
         switchMap(() => this.activatedRoute.queryParamMap),
         tap((queryParamMap) => {
           this.selectedRentalId = queryParamMap.get('selected') || undefined;
+
+          const page = queryParamMap.get('page');
+          this.page = page ? +page : 1;
         })
       )
       .subscribe(() => {
         this.fetchRentals();
       });
+  }
+
+  handlePageChange(page: number) {
+    this.page = page;
+    this.fetchRentals();
   }
 
   private fetchRentals() {
@@ -108,6 +117,7 @@ export class RentalsPanelPageComponent implements OnInit {
         this.panelType === PanelType.OWNER_PANEL
           ? this.loggedUserId
           : undefined,
+      page: this.page,
     };
 
     this.rentalService
