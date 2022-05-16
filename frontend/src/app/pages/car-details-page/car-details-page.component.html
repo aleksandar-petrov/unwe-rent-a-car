@@ -180,6 +180,8 @@
 <rac-modal #rentalRequestModal *ngIf="car" identifier="rentalRequestModal">
   <rac-rental-request-form
     (onSubmit)="handleRentalRequestSubmit($event)"
+    *ngIf="invalidRentalDatesFetched"
+    [invalidDates]="invalidRentalDates"
     [pricePerDay]="car.pricePerDay"
   ></rac-rental-request-form>
 </rac-modal>

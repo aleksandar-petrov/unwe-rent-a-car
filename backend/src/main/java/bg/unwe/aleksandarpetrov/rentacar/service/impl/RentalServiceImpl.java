@@ -30,6 +30,10 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,6 +48,9 @@ import org.springframework.stereotype.Service;
 public class RentalServiceImpl implements RentalService {
 
   private static final QRental RENTAL_PATH = QRental.rental;
+
+  private static final Sort RENTAL_DATES_SORT =
+      Sort.by(Order.desc("rentedFrom"), Order.desc("rentedTo"));
 
   private final RentalRepository rentalRepository;
 
@@ -120,10 +127,7 @@ public class RentalServiceImpl implements RentalService {
     }
 
     return rentalRepository
-        .findAll(
-            predicate,
-            PageRequest.of(
-                model.getPage() - 1, 6, Sort.by(Order.desc("rentedFrom"), Order.desc("rentedTo"))))
+        .findAll(predicate, PageRequest.of(model.getPage() - 1, 6, RENTAL_DATES_SORT))
         .map(mappingService::toRentalResponse);
   }
 
@@ -230,6 +234,26 @@ public class RentalServiceImpl implements RentalService {
     finishedRentals.forEach(r -> r.setStatus(RentalStatus.FINISHED));
 
     rentalRepository.saveAll(finishedRentals);
+  }
+
+  @Override
+  public Set<LocalDate> getRentalDates(String carId) {
+    var predicate =
+        (RENTAL_PATH.car.id.eq(carId))
+            .and(RENTAL_PATH.rentedFrom.loe(LocalDate.now()))
+            .and(RENTAL_PATH.status.in(RentalStatus.APPROVED, RentalStatus.STARTED));
+
+    var rentals = rentalRepository.findAll(predicate, RENTAL_DATES_SORT);
+
+    var result = new TreeSet<>(LocalDate::compareTo);
+    for (Rental rental : rentals) {
+      result.addAll(
+          LongStream.rangeClosed(0, rental.getDays())
+              .mapToObj(rental.getRentedFrom()::plusDays)
+              .collect(Collectors.toSet()));
+    }
+
+    return result;
   }
 
   private void throwIfNotInPendingVerificationStatus(Rental rental) {

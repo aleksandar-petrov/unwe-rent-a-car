@@ -82,6 +82,13 @@ export class RentalService {
     );
   }
 
+  getRentalDates(carId: string): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${environment.API_URL}/rentals/rental-dates`,
+      { params: new HttpParams().append('carId', carId) }
+    );
+  }
+
   private buildParams(model: any, params: HttpParams = new HttpParams()) {
     return {
       ofNullable: (prop: string) => {

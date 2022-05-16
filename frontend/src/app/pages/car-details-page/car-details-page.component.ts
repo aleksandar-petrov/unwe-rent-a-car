@@ -24,6 +24,8 @@ export class CarDetailsPageComponent implements OnInit {
   carPhotos: PhotoResponse[] = [];
   shouldShowControls: boolean = true;
   pendingVerificationRentalRouterLink: string | undefined;
+  invalidRentalDates: string[] = [];
+  invalidRentalDatesFetched: boolean = false;
 
   faCheck = faCheck;
 
@@ -75,6 +77,11 @@ export class CarDetailsPageComponent implements OnInit {
         }),
         tap((car) => {
           this.setCar(car);
+        }),
+        switchMap((car) => this.rentalService.getRentalDates(car.id)),
+        tap((invalidRentalDates) => {
+          this.invalidRentalDatesFetched = true;
+          this.invalidRentalDates = invalidRentalDates;
         }),
         switchMap(() => this.userService.userId$),
         tap((userId) => {

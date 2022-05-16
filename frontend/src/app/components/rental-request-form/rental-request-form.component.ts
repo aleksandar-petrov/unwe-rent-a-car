@@ -1,8 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { Moment } from 'moment/moment';
 import { RentalRequestForm } from '../../models/rental.model';
+import { DaterangepickerComponent } from 'ngx-daterangepicker-material';
 
 @Component({
   selector: 'rac-rental-request-form',
@@ -11,7 +19,10 @@ import { RentalRequestForm } from '../../models/rental.model';
 })
 export class RentalRequestFormComponent implements OnInit {
   @Input() pricePerDay: number = 0;
+  @Input() invalidDates: string[] = [];
   @Output() onSubmit = new EventEmitter<RentalRequestForm>();
+
+  @ViewChild('dateRangePicker') dateRangePicker!: DaterangepickerComponent;
 
   rentalRequestForm: FormGroup = this.fb.group({
     rentedFrom: [null, Validators.required],
@@ -32,9 +43,9 @@ export class RentalRequestFormComponent implements OnInit {
     this.onSubmit.emit(this.rentalRequestForm.value as RentalRequestForm);
   }
 
-  isInvalidDate(date: Moment): boolean {
-    return false;
-  }
+  isInvalidDate = (date: Moment) => {
+    return this.invalidDates.includes(date.format('yyyy-MM-DD'));
+  };
 
   handleDatesUpdated(event: any) {
     const { startDate, endDate } = event as {

@@ -7,6 +7,8 @@ import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalCreateRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalResponse;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountRequest;
 import bg.unwe.aleksandarpetrov.rentacar.web.payload.rental.RentalsCountResponse;
+import java.time.LocalDate;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +68,10 @@ public class RentalController {
   @PostMapping("/{id}/approve")
   public void approve(@PathVariable String id, @AuthenticationPrincipal User user) {
     rentalService.approve(id, user.getId());
+  }
+
+  @GetMapping("/rental-dates")
+  public Set<LocalDate> getRentalDates(@RequestParam String carId) {
+    return rentalService.getRentalDates(carId);
   }
 }
