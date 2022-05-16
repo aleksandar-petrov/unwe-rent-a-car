@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,12 @@ public class CarController {
     return carService.create(model, user.getId());
   }
 
+  @PreAuthorize("@authService.isUserOwnerOfCar(#user.id, #id)")
   @PutMapping("/{id}")
-  public void edit(@RequestBody @Valid @NotNull CarCreateRequest model, @PathVariable String id) {
+  public void edit(
+      @RequestBody @Valid @NotNull CarCreateRequest model,
+      @PathVariable String id,
+      @AuthenticationPrincipal User user) {
     carService.edit(id, model);
   }
 

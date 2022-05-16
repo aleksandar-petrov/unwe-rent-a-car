@@ -246,7 +246,9 @@ public class RentalServiceImpl implements RentalService {
   public Set<LocalDate> getRentalDates(String carId) {
     var predicate =
         (RENTAL_PATH.car.id.eq(carId))
-            .and(RENTAL_PATH.rentedFrom.loe(LocalDate.now()))
+            .and(
+                (RENTAL_PATH.rentedFrom.goe(LocalDate.now()))
+                    .or(RENTAL_PATH.rentedTo.goe(LocalDate.now())))
             .and(RENTAL_PATH.status.in(RentalStatus.APPROVED, RentalStatus.STARTED));
 
     var rentals = rentalRepository.findAll(predicate, RENTAL_DATES_SORT);
@@ -258,6 +260,10 @@ public class RentalServiceImpl implements RentalService {
               .mapToObj(rental.getRentedFrom()::plusDays)
               .collect(Collectors.toSet()));
     }
+
+    // 16 - 20
+    // 12-16
+    //
 
     return result;
   }

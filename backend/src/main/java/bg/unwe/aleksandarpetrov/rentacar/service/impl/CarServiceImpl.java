@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -57,6 +59,8 @@ public class CarServiceImpl implements CarService {
 
   private final TransliterationService transliterationService;
 
+  private final CacheManager cacheManager;
+
   @Override
   public CarResponse create(CarCreateRequest model, String userId) {
     var car = mappingService.toCar(model);
@@ -76,7 +80,18 @@ public class CarServiceImpl implements CarService {
 
     car = carRepository.save(car);
 
+    clearCarSearchCache();
+
     return mappingService.toCarResponse(car);
+  }
+
+  private void clearCarSearchCache() {
+    var carSearch = cacheManager.getCache("carSearch");
+    if (carSearch == null) {
+      return;
+    }
+
+    carSearch.clear();
   }
 
   @Override
@@ -149,8 +164,11 @@ public class CarServiceImpl implements CarService {
     carRepository.save(car);
 
     photoService.deleteAll(photosIdsToDelete);
+
+    clearCarSearchCache();
   }
 
+  @Cacheable("carSearch")
   @Override
   public CarSearchResponse getCarSearch() {
     var countryAndCityViews = carRepository.findAllGroupedByCountryAndCity();
@@ -161,6 +179,7 @@ public class CarServiceImpl implements CarService {
 
     var minMaxSearchView = carRepository.getMinMaxSearchView();
 
+    System.out.println("ura");
     return mappingService.toCarSearchResponse(minMaxSearchView, countries, makes);
   }
 
