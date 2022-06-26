@@ -28,7 +28,7 @@ export class RegisterPageComponent implements OnInit {
     ],
     phoneNumber: [
       null,
-      [Validators.required, Validators.pattern(/^(([+]?359)|0)8[789]\d{7}$/)],
+      [Validators.required, Validators.pattern(/^(([+]359)|0)8[789]\d{7}$/)],
       [RacValidators.existingPhoneNumber(this.userService)],
     ],
   });

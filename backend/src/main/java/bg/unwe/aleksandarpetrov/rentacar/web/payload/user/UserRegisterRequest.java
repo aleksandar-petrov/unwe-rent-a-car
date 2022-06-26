@@ -19,6 +19,6 @@ public class UserRegisterRequest {
   @NotBlank private String confirmPassword;
 
   @NotBlank
-  @Pattern(regexp = "^(([+]?359)|0)8[789]\\d{7}$")
+  @Pattern(regexp = "^(([+]359)|0)8[789]\\d{7}$")
   private String phoneNumber;
 }
